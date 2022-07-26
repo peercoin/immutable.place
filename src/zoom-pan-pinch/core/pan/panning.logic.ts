@@ -24,7 +24,7 @@ export function handlePanningStart(
 
   handleCancelAnimation(contextInstance);
   handleCalculateBounds(contextInstance, scale);
-  if (event instanceof TouchEvent) {
+  if (window.TouchEvent && event instanceof TouchEvent) {
     handleTouchPanningSetup(contextInstance, event as TouchEvent);
   } else {
     handlePanningSetup(contextInstance, event as MouseEvent);
