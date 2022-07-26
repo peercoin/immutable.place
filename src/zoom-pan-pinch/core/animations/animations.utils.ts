@@ -89,9 +89,6 @@ export function animate(
   const { setTransformState } = contextInstance;
   const { scale, positionX, positionY } = contextInstance.transformState;
 
-  console.log(targetState.scale);
-  console.log(scale);
-  console.log("------");
   const scaleDiff = targetState.scale - scale;
   const positionXDiff = targetState.positionX - positionX;
   const positionYDiff = targetState.positionY - positionY;
@@ -104,14 +101,11 @@ export function animate(
     );
   } else {
     // animation start timestamp
-    console.log("handle");
     handleSetupAnimation(
       contextInstance,
       animationName,
       animationTime,
       (step: number) => {
-        console.log(`scaleDiff = ${scaleDiff}`);
-        console.log(`step = ${step}`);
         const newScale = scale + scaleDiff * step;
         const newPositionX = positionX + positionXDiff * step;
         const newPositionY = positionY + positionYDiff * step;

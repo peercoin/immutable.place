@@ -3,7 +3,7 @@ import PixelCanvas from "./PixelCanvas";
 
 export default function App() {
   return (
-    <Camera>
+    <Camera onClick={() => console.log("Clicked")}>
       <PixelCanvas></PixelCanvas>
     </Camera>
   );

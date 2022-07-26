@@ -5,7 +5,8 @@ import {MutableRefObject, useCallback, useRef} from "react";
  * argument is called once when the ref is set.
  */
 export default function useRefInitialCallback<T>(
-  callback: (value: T) => void
+  callback: (value: T) => void,
+  alwaysCallback?: (value: T) => void
 ): [MutableRefObject<T | null>, (value: T) => void] {
 
   const didSet = useRef(false);
@@ -14,13 +15,17 @@ export default function useRefInitialCallback<T>(
 
     ref.current = value;
 
-    // Do not continue if we have already set or if the value is null
-    if (value === null || didSet.current) return;
+    // Call alwaysCallback if the value isn't null
+    if (value === null) return;
+    if (alwaysCallback) alwaysCallback(value);
+
+    // Continue and call the initial callback if we haven't set before
+    if (didSet.current) return;
     didSet.current = true;
 
     callback(value);
 
-  }, [callback]);
+  }, [callback, alwaysCallback]);
 
   return [ref, refCallback];
 

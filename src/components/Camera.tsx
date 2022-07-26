@@ -1,4 +1,4 @@
-import {Fragment, ReactNode, MouseEvent} from "react";
+import {Fragment, ReactNode, MouseEvent, useEffect, useState} from "react";
 import "./Camera.scss";
 import useMovement from "../hooks/useMovement";
 import useRefInitialCallback from "../hooks/useRefInitialCallback";
@@ -12,7 +12,25 @@ const CLICK_SCALE_THRESHOLD = 10;
 const CLICK_ZOOM_SCALE = 15;
 
 /* eslint-disable max-lines-per-function */
-export default function Camera({children}: { children: ReactNode }) {
+/**
+ * Provides navigation of {children}
+ * @param onClick Called when zoomed in and clicked on
+ */
+export default function Camera(
+  {
+    children,
+    onClick
+  }: {
+    children: ReactNode,
+    onClick: (event: MouseEvent) => void
+  }
+) {
+
+  const [clickable, setClickable] = useState(false);
+
+  function handleNewScale(transformer: ReactZoomPanPinchRef) {
+    setClickable(transformer.state.scale >= CLICK_SCALE_THRESHOLD);
+  }
 
   const [
     transformRef,
@@ -36,7 +54,7 @@ export default function Camera({children}: { children: ReactNode }) {
 
     transformer.setTransform(x, y, transformer.state.scale, 0);
 
-  });
+  }, handleNewScale); // handleNewScale is called on every update
 
   function withinBounds(
     newVal: number, minVal: number | undefined, maxVal: number | undefined
@@ -84,6 +102,8 @@ export default function Camera({children}: { children: ReactNode }) {
 
     if (scale < CLICK_SCALE_THRESHOLD) {
       transformer.zoomToMouseEvent(e, CLICK_ZOOM_SCALE, 500, "easeInOutQuad");
+    } else {
+      onClick(e);
     }
 
   }
@@ -101,7 +121,9 @@ export default function Camera({children}: { children: ReactNode }) {
     >
       {({ zoomIn, zoomOut }) => (
         <Fragment>
-          <TransformComponent wrapperClass="camera-wrapper">
+          <TransformComponent
+            wrapperClass={`camera-wrapper ${clickable ? "clickable" : ""}`}
+          >
             <ShortClickable onShortClick={handleClick}>
               {children}
             </ShortClickable>
