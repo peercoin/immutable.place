@@ -1,0 +1,23 @@
+.camera-wrapper {
+  position: absolute !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.zoom-buttons {
+  position: absolute;
+  bottom: 0;
+  margin: 15px;
+
+  button {
+    &:hover {
+      cursor: pointer;
+    }
+    margin: 10px;
+    font-size: 40px;
+    min-width: 50px;
+    min-height: 50px;
+  }
+
+}
+

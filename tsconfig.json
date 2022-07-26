@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "target": "ES6",
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "rootDir": "src",
+        "outDir": "build",
+        "jsx": "react-jsx"
+    },
+}
+
