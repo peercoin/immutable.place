@@ -204,7 +204,7 @@ module.exports = {
         "no-useless-return": "error",
         "no-var": "error",
         "no-void": ["error", { "allowAsStatement": true }],
-        "no-warning-comments": "error",
+        "no-warning-comments": "warn",
         "no-whitespace-before-property": "error",
         "object-curly-newline": "error",
         "object-curly-spacing": "off",

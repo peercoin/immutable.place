@@ -1,4 +1,4 @@
-import {Fragment, ReactNode, MouseEvent, useEffect, useState} from "react";
+import {Fragment, ReactNode, MouseEvent, useState, useCallback} from "react";
 import "./Camera.scss";
 import useMovement from "../hooks/useMovement";
 import useRefInitialCallback from "../hooks/useRefInitialCallback";
@@ -32,10 +32,7 @@ export default function Camera(
     setClickable(transformer.state.scale >= CLICK_SCALE_THRESHOLD);
   }
 
-  const [
-    transformRef,
-    transformRefCallback
-  ] = useRefInitialCallback<ReactZoomPanPinchRef>((transformer) => {
+  const randomPosition = useCallback((transformer: ReactZoomPanPinchRef) => {
 
     // Set initial position to random
     // Use the bounds object which goes into the negative and doesn't make much
@@ -54,7 +51,14 @@ export default function Camera(
 
     transformer.setTransform(x, y, transformer.state.scale, 0);
 
-  }, handleNewScale); // handleNewScale is called on every update
+  }, []);
+
+  const [
+    transformRef,
+    transformRefCallback
+  ] = useRefInitialCallback<ReactZoomPanPinchRef>(
+    randomPosition, handleNewScale // handleNewScale is called on every update
+  );
 
   function withinBounds(
     newVal: number, minVal: number | undefined, maxVal: number | undefined
