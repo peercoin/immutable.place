@@ -1,0 +1,28 @@
+.pixel-colour-row {
+
+  position: relative;
+  padding: 8px 10px;
+  margin: 5px;
+  border: solid 1px;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+
+  &:hover {
+    background: #ccd;
+    cursor: pointer;
+  }
+
+}
+
+.pixel-colour {
+  width: 15px;
+  height: 15px;
+}
+
+.pixel-colour-balance {
+  margin-left: auto;
+  font-family: monospace;
+}
