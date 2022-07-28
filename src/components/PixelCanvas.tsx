@@ -1,26 +1,36 @@
-import {useEffect, useRef} from "react";
+import {
+  ForwardedRef, forwardRef, useEffect, useImperativeHandle, useRef, MouseEvent
+} from "react";
 import "./PixelCanvas.css";
 
-// Temporary random pixels
-const data = new Uint8ClampedArray(1000*1000*4);
-for (let i = 0; i < 1000000; i++) {
-  data[i*4] = Math.random()*255;
-  data[i*4+1] = Math.random()*255;
-  data[i*4+2] = Math.random()*255;
-  data[i*4+3] = 255;
+export interface PixelCanvasRef {
+  getPixelOfMouseEvent: (e: MouseEvent) => { x: number, y: number } | null;
 }
 
-export default function PixelCanvas(
-  {
-    width = 1000,
-    height = 1000
-  }: {
-    width?: number,
-    height?: number
-  }
+function PixelCanvas(
+  { imgData }: { imgData: ImageData },
+  ref: ForwardedRef<PixelCanvasRef>
 ) {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useImperativeHandle(ref, () => ({
+    getPixelOfMouseEvent: (e: MouseEvent) => {
+
+      if (canvasRef.current === null) return null;
+      const canvas = canvasRef.current;
+
+      const rect = canvas.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
+      const y = (e.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height;
+
+      return {
+        x: Math.floor(x),
+        y: Math.floor(y)
+      };
+
+    }
+  }));
 
   useEffect(() => {
 
@@ -30,8 +40,6 @@ export default function PixelCanvas(
     const ctx = canvas.getContext("2d");
     if (ctx === null) return;
 
-    const imgData = new ImageData(data, 1000, 1000);
-
     ctx.putImageData(imgData, 0, 0);
 
   });
@@ -40,9 +48,11 @@ export default function PixelCanvas(
     <canvas
       className="pixel-canvas card"
       ref={canvasRef}
-      width={width}
-      height={height}
+      width={imgData.width}
+      height={imgData.height}
     />
   );
 
 }
+
+export default forwardRef(PixelCanvas);
