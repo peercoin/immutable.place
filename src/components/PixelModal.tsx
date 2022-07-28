@@ -1,8 +1,8 @@
 import "./PixelModal.scss";
 import Modal from "./Modal";
-import {PixelData} from "coin-canvas-lib";
+import {Colour, PixelData} from "coin-canvas-lib";
 import {satsToCoinString} from "../utils/coin";
-import {useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 
 export type PixelModalData = { x: number, y: number, colours: PixelData } | null;
 
@@ -19,12 +19,6 @@ export default function PixelModal(
   }
 ) {
 
-  function biCmp(a: bigint, b: bigint) {
-    if (a < b) return -1;
-    if (a > b) return 1;
-    return 0;
-  }
-
   const previewRef = useRef<HTMLCanvasElement>(null);
   const preview = <canvas
     ref={previewRef}
@@ -32,6 +26,8 @@ export default function PixelModal(
     width="5"
     height="5"
   />;
+
+  const [hoverColour, setHoverColour] = useState<Colour | null>(null);
 
   useEffect(() => {
 
@@ -67,6 +63,12 @@ export default function PixelModal(
 
     }
 
+    if (hoverColour !== null) {
+      previewData[12*4] = hoverColour.red;
+      previewData[12*4+1] = hoverColour.green;
+      previewData[12*4+2] = hoverColour.blue;
+    }
+
     ctx.putImageData(new ImageData(previewData, 5, 5), 0, 0);
 
   });
@@ -75,10 +77,21 @@ export default function PixelModal(
 
   if (pixel === null) return null;
 
+  function biCmp(a: bigint, b: bigint) {
+    if (a < b) return -1;
+    if (a > b) return 1;
+    return 0;
+  }
+
   const colourRows = pixel.colours.sort(
     (a, b) => -biCmp(a.balance, b.balance)
   ).map(data => (
-    <div className="pixel-colour-row" key={data.colour.id.toString()}>
+    <div
+      className="pixel-colour-row"
+      key={data.colour.id.toString()}
+      onMouseEnter={() => setHoverColour(data.colour)}
+      onMouseLeave={() => setHoverColour(null)}
+    >
       <div className="pixel-colour" style={{ background: data.colour.cssStr }}></div>
       <div className="pixel-colour-name">{ data.colour.name }</div>
       <div className="pixel-colour-balance">
