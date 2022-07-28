@@ -1,4 +1,7 @@
+@use "./mixins.scss";
+
 .pixel-canvas {
+    @include mixins.pixelated-canvas;
     -ms-interpolation-mode: bicubic;
     image-rendering: -moz-crisp-edges;
     image-rendering: -webkit-optimize-contrast;

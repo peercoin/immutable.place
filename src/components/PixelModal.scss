@@ -1,3 +1,5 @@
+@use "./mixins.scss";
+
 .pixel-colour-row {
 
   position: relative;
@@ -15,6 +17,13 @@
     cursor: pointer;
   }
 
+}
+
+.pixel-preview {
+  @include mixins.pixelated-canvas;
+  height: 1.5em;
+  width: 1.5em;
+  box-shadow: 0px 0px 5px 0px #0008;
 }
 
 .pixel-colour {

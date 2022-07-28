@@ -5,10 +5,12 @@ export default function Modal(
   {
     children,
     title,
+    topLeftElement,
     open,
     onClose = () => undefined
   }: {
     children: ReactNode,
+    topLeftElement?: ReactNode,
     title: string,
     open: boolean,
     onClose?: () => void
@@ -21,6 +23,7 @@ export default function Modal(
     <div className="modal-background" onClick={onClose}>
       <div className="modal" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
+          {topLeftElement}
           {title}
           <button className="closeBtn" onClick={onClose}>Close X</button>
         </div>

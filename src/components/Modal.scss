@@ -32,6 +32,10 @@
 .modal-header {
   margin-bottom: 10px;
   font-size: 2em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
 }
 
 .modal-content {
@@ -39,8 +43,8 @@
 }
 
 .closeBtn {
-  float: right;
   font-size: 0.5em;
+  margin-left: auto;
   &:hover {
     cursor: pointer;
   }

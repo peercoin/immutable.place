@@ -7,9 +7,10 @@ import {Colour} from "coin-canvas-lib";
 // Temporary random pixels
 const data = new Uint8ClampedArray(1000*1000*4);
 for (let i = 0; i < 1000000; i++) {
-  data[i*4] = Math.random()*255;
-  data[i*4+1] = Math.random()*255;
-  data[i*4+2] = Math.random()*255;
+  const c = Colour.fromId(Math.floor(Math.random() * 16));
+  data[i*4] = c.red;
+  data[i*4+1] = c.green;
+  data[i*4+2] = c.blue;
   data[i*4+3] = 255;
 }
 
@@ -43,9 +44,9 @@ export default function App() {
   return (
     <Fragment>
       <Camera onClick={handleCanvasClick}>
-        <PixelCanvas imgData={imgData} ref={canvasRef}></PixelCanvas>
+        <PixelCanvas imgData={imgData} ref={canvasRef}/>
       </Camera>
-      <PixelModal pixel={pixel} onClose={() => setPixel(null)}></PixelModal>
+      <PixelModal pixel={pixel} imgData={imgData} onClose={() => setPixel(null)}/>
     </Fragment>
   );
 
