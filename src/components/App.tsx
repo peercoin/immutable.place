@@ -32,7 +32,7 @@ export default function App() {
       // TODO: Obtain actual pixel data
       colours: [...Array(16).keys()].map(i => ({
         balance: BigInt(i),
-        address: "placeholder",
+        address: "tpc1qcanvas0000000000000000000000000000000000000qqqqqqqqq8e09fm",
         colour: Colour.fromId(i)
       }))
     });

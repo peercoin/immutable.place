@@ -1,8 +1,9 @@
 import "./PixelModal.scss";
 import Modal from "./Modal";
-import {Colour, PixelData} from "coin-canvas-lib";
-import {satsToCoinString} from "../utils/coin";
+import {Colour, PixelData, PixelColourData} from "coin-canvas-lib";
 import {useEffect, useRef, useState} from "react";
+import PixelColourSelection from "./PixelColourSelection";
+import PixelColourPayment from "./PixelColourPayment";
 
 export type PixelModalData = { x: number, y: number, colours: PixelData } | null;
 
@@ -11,11 +12,13 @@ export default function PixelModal(
   {
     pixel = null,
     imgData,
-    onClose = () => undefined
+    onClose = () => undefined,
+    selectColourData = null
   }: {
     pixel?: PixelModalData,
     imgData: ImageData,
-    onClose?: () => void
+    onClose?: () => void,
+    selectColourData?: PixelColourData | null
   }
 ) {
 
@@ -27,7 +30,14 @@ export default function PixelModal(
     height="5"
   />;
 
+  // This state only tracks colours selected by the button. The colour can also
+  // be passed as the selectColour prop
+  const [selectedColourData, setSelectedColourData] = useState<PixelColourData | null>(null);
   const [hoverColour, setHoverColour] = useState<Colour | null>(null);
+
+  function getSelectedColourData() {
+    return selectColourData ?? selectedColourData;
+  }
 
   useEffect(() => {
 
@@ -63,10 +73,12 @@ export default function PixelModal(
 
     }
 
-    if (hoverColour !== null) {
-      previewData[12*4] = hoverColour.red;
-      previewData[12*4+1] = hoverColour.green;
-      previewData[12*4+2] = hoverColour.blue;
+    const showColour = getSelectedColourData()?.colour ?? hoverColour;
+
+    if (showColour !== null) {
+      previewData[12*4] = showColour.red;
+      previewData[12*4+1] = showColour.green;
+      previewData[12*4+2] = showColour.blue;
     }
 
     ctx.putImageData(new ImageData(previewData, 5, 5), 0, 0);
@@ -77,42 +89,41 @@ export default function PixelModal(
 
   if (pixel === null) return null;
 
-  function biCmp(a: bigint, b: bigint) {
-    if (a < b) return -1;
-    if (a > b) return 1;
-    return 0;
-  }
+  const colourData = getSelectedColourData();
 
-  const colourRows = pixel.colours.sort(
-    (a, b) => -biCmp(a.balance, b.balance)
-  ).map(data => (
-    <div
-      className="pixel-colour-row"
-      key={data.colour.id.toString()}
-      onMouseEnter={() => setHoverColour(data.colour)}
-      onMouseLeave={() => setHoverColour(null)}
-    >
-      <div className="pixel-colour" style={{ background: data.colour.cssStr }}></div>
-      <div className="pixel-colour-name">{ data.colour.name }</div>
-      <div className="pixel-colour-balance">
-        { `${satsToCoinString(data.balance)} PPC` }
-      </div>
-    </div>
-  ));
+  // Infer active colour from RGB value
+  const activeOffset = (pixel.x + pixel.y*imgData.width)*4;
+  const activeColour = pixel.colours.find(
+    cd => cd.colour.red == imgData.data[activeOffset]
+    && cd.colour.green == imgData.data[activeOffset+1]
+    && cd.colour.blue == imgData.data[activeOffset+2]
+  );
 
   return (
     <Modal
       title={`Pixel (${pixel.x}, ${pixel.y})`}
       topLeftElement={preview}
       open={true}
-      onClose={onClose}
+      onClose={() => {
+        // Ensure the next time the modal is opened, there is no slected colour
+        setSelectedColourData(null);
+        setHoverColour(null);
+        onClose();
+      }}
     >
-      <p>
-        Select a colour that you would like to paint this pixel with. The
-        colours are ordered by total amounts received. The colour with the
-        highest amount is selected.
-      </p>
-      {colourRows}
+      {
+        colourData === null
+          ? <PixelColourSelection
+            colours={pixel.colours}
+            onHoverColour={setHoverColour}
+            onSelectColourData={setSelectedColourData}
+          />
+          : <PixelColourPayment
+            colours={pixel.colours}
+            colourData={colourData}
+            activeColour={activeColour}
+          />
+      }
     </Modal>
   );
 

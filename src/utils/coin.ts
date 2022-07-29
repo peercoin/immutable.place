@@ -1,5 +1,13 @@
 
-export function satsToCoinString(sats: bigint, decimals = 6) {
+export function satsToCoinString(
+  sats: bigint, {
+    decimals = 6,
+    short = false
+  } : {
+    decimals?: number,
+    short?: boolean
+  } = {}
+) {
 
   // Split to coin amount and decimal amount
   const oneCoin = BigInt(10**decimals);
@@ -13,6 +21,13 @@ export function satsToCoinString(sats: bigint, decimals = 6) {
   const zerosToAdd = decimals - decimalStr.length;
   if (zerosToAdd > 0) {
     decimalStr = "0".repeat(zerosToAdd) + decimalStr;
+  }
+
+  if (short) {
+    if (decimalAmt == BigInt(0)) {
+      return coinAmt.toString();
+    }
+    decimalStr = decimalStr.replace(/0+$/u, "");
   }
 
   // Combine coin and decimal amounts
