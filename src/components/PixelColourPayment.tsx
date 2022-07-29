@@ -1,22 +1,25 @@
 import "./PixelColourPayment.scss";
-import {PixelData, PixelColourData} from "coin-canvas-lib";
+import {PixelColourData} from "coin-canvas-lib";
 import {satsToCoinString} from "../utils/coin";
 import {Fragment} from "react";
+import {QRCodeSVG} from "qrcode.react";
+import {PixelModalData} from "./PixelModal";
 
 const MIN_AMOUNT = BigInt(10000);
 
 /* eslint-disable max-lines-per-function */
 export default function PixelColourPayment(
   {
-    colours, colourData, activeColour
+    pixel, colourData, activeColour
   }: {
-    colours: PixelData,
+    pixel: PixelModalData,
     colourData: PixelColourData,
-    activeColour?: PixelColourData
+    activeColour: PixelColourData
   }
 ) {
 
-  const maxReceived = colours.map(c => c.balance).reduce((a, b) => (a > b ? a : b));
+  const maxReceived = activeColour.balance;
+
   const selectedReceived = colourData.balance;
   const diffPlusOne = maxReceived - selectedReceived + BigInt(1);
   const toPay = diffPlusOne > MIN_AMOUNT ? diffPlusOne : MIN_AMOUNT;
@@ -25,6 +28,12 @@ export default function PixelColourPayment(
     || activeColour.colour.id !== colourData.colour.id;
 
   const amtStr = satsToCoinString(toPay, { short: true });
+  const colourName = colourData.colour.name;
+  const capitalColour = colourName.charAt(0).toUpperCase() + colourName.slice(1);
+  const label = `Pixel%20(${pixel.x},%20${pixel.y})%20${capitalColour}`;
+
+  const amtSegment = newColour ? `amount=${amtStr}&` : "";
+  const uri = `peercoin:${colourData.address}?${amtSegment}label=${label}`;
 
   return (
     <Fragment>
@@ -32,22 +41,31 @@ export default function PixelColourPayment(
         {
           newColour
             ? <Fragment>
-              To change the colour to {colourData.colour.name}, please pay a
-              minimum of {amtStr} PPC to the following address. You can scan the
-              QR code to make payment. The required payment amount may be
-              different if this pixel receives any other payments.
+              To change the colour to {colourName}, please pay a minimum of
+              {amtStr} PPC to the following address. You can scan the QR code to
+              make payment. The required payment amount may be different if this
+              pixel receives any other payments.
             </Fragment>
             : <Fragment>
-              The colour {colourData.colour.name} is currently active but you
-              may make an additional payment to make it more costly to change
-              the colour. Please use the address and/or QR code below.
+              The colour {colourName} is currently active but you may make an
+              additional payment to make it more costly to change the colour.
+              Please use the address and/or QR code below.
             </Fragment>
         }
       </p>
       <p className="payment-details">
-        <b>Required Amount</b>: {amtStr} PPC<br/>
+        {
+          newColour
+            ? <Fragment><b>Required Amount</b>: {amtStr} PPC<br/></Fragment>
+            : null
+        }
         <b>Address</b>: {colourData.address}
       </p>
+      <QRCodeSVG
+        className="payment-qr"
+        value={uri}
+        bgColor="#0000"
+      />
     </Fragment>
   );
 

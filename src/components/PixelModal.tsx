@@ -5,7 +5,7 @@ import {useEffect, useRef, useState} from "react";
 import PixelColourSelection from "./PixelColourSelection";
 import PixelColourPayment from "./PixelColourPayment";
 
-export type PixelModalData = { x: number, y: number, colours: PixelData } | null;
+export type PixelModalData = { x: number, y: number, colours: PixelData };
 
 /* eslint-disable max-lines-per-function */
 export default function PixelModal(
@@ -15,7 +15,7 @@ export default function PixelModal(
     onClose = () => undefined,
     selectColourData = null
   }: {
-    pixel?: PixelModalData,
+    pixel?: PixelModalData | null,
     imgData: ImageData,
     onClose?: () => void,
     selectColourData?: PixelColourData | null
@@ -99,6 +99,8 @@ export default function PixelModal(
     && cd.colour.blue == imgData.data[activeOffset+2]
   );
 
+  if (activeColour === undefined) return null;
+
   return (
     <Modal
       title={`Pixel (${pixel.x}, ${pixel.y})`}
@@ -119,7 +121,7 @@ export default function PixelModal(
             onSelectColourData={setSelectedColourData}
           />
           : <PixelColourPayment
-            colours={pixel.colours}
+            pixel={pixel}
             colourData={colourData}
             activeColour={activeColour}
           />

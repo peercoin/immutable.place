@@ -16,7 +16,7 @@ for (let i = 0; i < 1000000; i++) {
 
 export default function App() {
 
-  const [pixel, setPixel] = useState<PixelModalData>(null);
+  const [pixel, setPixel] = useState<PixelModalData | null>(null);
   const canvasRef = useRef<PixelCanvasRef>(null);
 
   function handleCanvasClick(e: MouseEvent) {
