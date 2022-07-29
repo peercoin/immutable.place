@@ -41,10 +41,10 @@ export default function PixelColourPayment(
         {
           newColour
             ? <Fragment>
-              To change the colour to {colourName}, please pay a minimum of
-              {amtStr} PPC to the following address. You can scan the QR code to
-              make payment. The required payment amount may be different if this
-              pixel receives any other payments.
+              To change the colour to {colourName}, please pay a minimum
+              of {amtStr} PPC to the following address. You can scan the QR code
+              to make payment. The required payment amount may be different if
+              this pixel receives any other payments.
             </Fragment>
             : <Fragment>
               The colour {colourName} is currently active but you may make an
