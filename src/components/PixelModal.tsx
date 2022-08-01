@@ -1,11 +1,13 @@
 import "./PixelModal.scss";
 import Modal from "./Modal";
-import {Colour, PixelData, PixelColourData} from "coin-canvas-lib";
+import {Colour, PixelData, PixelColourData, PixelCoord} from "coin-canvas-lib";
 import {useEffect, useRef, useState} from "react";
 import PixelColourSelection from "./PixelColourSelection";
 import PixelColourPayment from "./PixelColourPayment";
 
-export type PixelModalData = { x: number, y: number, colours: PixelData };
+export interface PixelModalData extends PixelCoord {
+  colours: PixelData
+}
 
 /* eslint-disable max-lines-per-function */
 export default function PixelModal(

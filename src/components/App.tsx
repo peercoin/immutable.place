@@ -3,20 +3,26 @@ import Camera from "./Camera";
 import PixelModal, {PixelModalData} from "./PixelModal";
 import PixelCanvas, {PixelCanvasRef} from "./PixelCanvas";
 import {Colour} from "coin-canvas-lib";
+import Palette from "./Palette";
+
+const CANVAS_HEIGHT = 1000;
+const CANVAS_WIDTH = 1000;
 
 // Temporary random pixels
-const data = new Uint8ClampedArray(1000*1000*4);
+const testData = new Uint8ClampedArray(1000*1000*4);
 for (let i = 0; i < 1000000; i++) {
   const c = Colour.fromId(Math.floor(Math.random() * 16));
-  data[i*4] = c.red;
-  data[i*4+1] = c.green;
-  data[i*4+2] = c.blue;
-  data[i*4+3] = 255;
+  testData[i*4] = c.red;
+  testData[i*4+1] = c.green;
+  testData[i*4+2] = c.blue;
+  testData[i*4+3] = 255;
 }
 
+/* eslint-disable max-lines-per-function */
 export default function App() {
 
   const [pixel, setPixel] = useState<PixelModalData | null>(null);
+  const [colourDrop, setColourDrop] = useState<Colour | null>(null);
   const canvasRef = useRef<PixelCanvasRef>(null);
 
   function handleCanvasClick(e: MouseEvent) {
@@ -39,15 +45,33 @@ export default function App() {
 
   }
 
-  const imgData = new ImageData(data, 1000, 1000);
+  const imgData = new ImageData(testData, CANVAS_WIDTH, CANVAS_HEIGHT);
 
   return (
     <Fragment>
       <Camera onClick={handleCanvasClick}>
-        <PixelCanvas imgData={imgData} ref={canvasRef}/>
+        <PixelCanvas
+          imgData={imgData}
+          ref={canvasRef}
+          onHoverColour={colourDrop}
+        />
       </Camera>
-      <PixelModal pixel={pixel} imgData={imgData} onClose={() => setPixel(null)}/>
+      <Palette
+        selectedColour={colourDrop}
+        onSelection={setColourDrop}
+      />
+      <PixelModal
+        pixel={pixel}
+        imgData={imgData}
+        onClose={() => {
+          setPixel(null);
+          // Remove colour selection when modal closes
+          setColourDrop(null);
+        }}
+      />
     </Fragment>
   );
 
 }
+/* eslint-enable */
+
