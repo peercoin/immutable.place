@@ -10,11 +10,13 @@ const MIN_AMOUNT = BigInt(10000);
 /* eslint-disable max-lines-per-function */
 export default function PixelColourPayment(
   {
-    pixel, colourData, activeColour
+    pixel, colourData, activeColour, onCancel, onConfirm
   }: {
     pixel: PixelModalData,
     colourData: PixelColourData,
-    activeColour: PixelColourData
+    activeColour: PixelColourData,
+    onCancel: () => void,
+    onConfirm: () => void
   }
 ) {
 
@@ -66,6 +68,20 @@ export default function PixelColourPayment(
         value={uri}
         bgColor="#0000"
       />
+      <p>
+        <small>
+          All payments will be counted, even if you press "Cancel". By
+          confirming that you have made payment, this will keep the pixel
+          painted until it is refreshed or updated.
+        </small>
+      </p>
+      <p>
+        <small>Payments are subject to the Terms of Use.</small>
+      </p>
+      <div className="payment-buttons">
+        <button className="payment-cancel" onClick={onCancel}>Cancel</button>
+        <button className="payment-confirm" onClick={onConfirm}>I have made payment</button>
+      </div>
     </Fragment>
   );
 

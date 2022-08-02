@@ -23,6 +23,7 @@ export default function Palette(
       className={`palette-colour ${c.id == selectedColour?.id ? "selected" : ""}`}
       style={{ background: c.cssStr }}
       onClick={() => onColourClick(c)}
+      key={c.id}
     />
   );
 

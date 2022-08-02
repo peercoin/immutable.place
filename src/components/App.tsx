@@ -1,8 +1,8 @@
-import {Fragment, useState, MouseEvent, useRef} from "react";
+import {Fragment, useState, MouseEvent, useRef, useReducer} from "react";
 import Camera from "./Camera";
 import PixelModal, {PixelModalData} from "./PixelModal";
 import PixelCanvas, {PixelCanvasRef} from "./PixelCanvas";
-import {Colour} from "coin-canvas-lib";
+import {Colour, PixelColour} from "coin-canvas-lib";
 import Palette from "./Palette";
 
 const CANVAS_HEIGHT = 1000;
@@ -18,8 +18,19 @@ for (let i = 0; i < 1000000; i++) {
   testData[i*4+3] = 255;
 }
 
+// Reduce the canvas state using new pixel information
+function canvasReducer(data: Uint8ClampedArray, action: PixelColour) {
+  const offset = (action.coord.x + action.coord.y*CANVAS_WIDTH)*4;
+  data[offset] = action.colour.red;
+  data[offset + 1] = action.colour.green;
+  data[offset + 2] = action.colour.blue;
+  return data;
+}
+
 /* eslint-disable max-lines-per-function */
 export default function App() {
+
+  const [canvasData, dispatchCanvas] = useReducer(canvasReducer, testData);
 
   const [pixel, setPixel] = useState<PixelModalData | null>(null);
   const [colourDrop, setColourDrop] = useState<Colour | null>(null);
@@ -45,7 +56,18 @@ export default function App() {
 
   }
 
-  const imgData = new ImageData(testData, CANVAS_WIDTH, CANVAS_HEIGHT);
+  const imgData = new ImageData(canvasData, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+  function clearPixel() {
+    setPixel(null);
+    // Remove colour selection when modal closes
+    setColourDrop(null);
+  }
+
+  function confirmedPixel(pixelColour: PixelColour) {
+    clearPixel();
+    dispatchCanvas(pixelColour);
+  }
 
   return (
     <Fragment>
@@ -63,11 +85,8 @@ export default function App() {
       <PixelModal
         pixel={pixel}
         imgData={imgData}
-        onClose={() => {
-          setPixel(null);
-          // Remove colour selection when modal closes
-          setColourDrop(null);
-        }}
+        onCancel={clearPixel}
+        onConfirm={confirmedPixel}
         selectColourData={
           (colourDrop === null || pixel === null)
             ? null

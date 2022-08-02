@@ -21,8 +21,8 @@
 
 .pixel-preview {
   @include mixins.pixelated-canvas;
-  height: 1.5em;
-  width: 1.5em;
+  height: 1.8em;
+  width: 1.8em;
   box-shadow: 0px 0px 5px 0px #0008;
 }
 
