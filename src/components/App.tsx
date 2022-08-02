@@ -68,6 +68,11 @@ export default function App() {
           // Remove colour selection when modal closes
           setColourDrop(null);
         }}
+        selectColourData={
+          (colourDrop === null || pixel === null)
+            ? null
+            : pixel.colours[colourDrop.id]
+        }
       />
     </Fragment>
   );
