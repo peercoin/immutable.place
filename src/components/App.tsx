@@ -12,9 +12,9 @@ const CANVAS_WIDTH = 1000;
 const testData = new Uint8ClampedArray(1000*1000*4);
 for (let i = 0; i < 1000000; i++) {
   const c = Colour.fromId(Math.floor(Math.random() * 16));
-  testData[i*4] = c.red;
-  testData[i*4+1] = c.green;
-  testData[i*4+2] = c.blue;
+  testData[i*4] = 255;
+  testData[i*4+1] = 255;
+  testData[i*4+2] = 255;
   testData[i*4+3] = 255;
 }
 

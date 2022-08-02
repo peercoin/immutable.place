@@ -69,12 +69,18 @@ function PixelCanvas(
     if (onHoverColour === null) return;
 
     const pixel = pixelCanvasRefObj.getPixelOfMouseEvent(e);
+
     if (
       pixel?.x == hoveredPixelRef.current?.x
       && pixel?.y == hoveredPixelRef.current?.y
     ) return;
 
     hoveredPixelRef.current = pixel;
+
+    // Start by placing pixel canvas data before adding single pixel overlay
+    const ctx = getCanvasContext();
+    if (ctx === null) return;
+    ctx.putImageData(imgData, 0, 0);
 
     if (pixel === null) return;
 
@@ -84,11 +90,6 @@ function PixelCanvas(
     pixData[2] = onHoverColour.blue;
     pixData[3] = 0xff;
 
-    const ctx = getCanvasContext();
-    if (ctx === null) return;
-
-    // Place canvas data and then overlay with single pixel of selected colour
-    ctx.putImageData(imgData, 0, 0);
     ctx.putImageData(new ImageData(pixData, 1, 1), pixel.x, pixel.y);
 
   }
@@ -99,7 +100,8 @@ function PixelCanvas(
       ref={canvasRef}
       width={imgData.width}
       height={imgData.height}
-      onMouseMove={onHoverColour === null ? () => undefined : onMouseMove}
+      onMouseMove={onMouseMove}
+      onMouseLeave={onMouseMove}
     />
   );
 
