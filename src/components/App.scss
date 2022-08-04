@@ -1,3 +1,5 @@
+@use "./mixins.scss";
+
 .load-screen {
 
   position: absolute;
@@ -22,5 +24,22 @@
   background: #d00;
   color: white;
   text-align: center;
+}
+
+.coordinates-container {
+  @include mixins.flex-positioner;
+  justify-content: right;
+  align-items: flex-start;
+}
+
+.coordinates {
+  position: absolute;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 3px;
+  background: #000b;
+  color: white;
+  pointer-events: none;
+  font-family: monospace;
 }
 

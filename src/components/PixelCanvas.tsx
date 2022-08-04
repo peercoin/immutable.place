@@ -1,27 +1,29 @@
 import {Colour, PixelCoord} from "coin-canvas-lib";
 import {
-  ForwardedRef, forwardRef, useEffect, useImperativeHandle, useRef, MouseEvent
+  ForwardedRef, forwardRef, useEffect, useImperativeHandle, useRef, MouseEvent, useState
 } from "react";
 import "./PixelCanvas.css";
 
 export interface PixelCanvasRef {
-  getPixelOfMouseEvent: (e: MouseEvent) => { x: number, y: number } | null;
+  getPixelOfMouseEvent: (e: MouseEvent) => PixelCoord | null;
 }
 
 /* eslint-disable max-lines-per-function */
 function PixelCanvas(
   {
     imgData,
-    onHoverColour
+    hoverColour,
+    onPixelHover
   }: {
     imgData: ImageData
-    onHoverColour: Colour | null
+    hoverColour: Colour | null
+    onPixelHover: (pixel: PixelCoord | null) => void
   },
   ref: ForwardedRef<PixelCanvasRef>
 ) {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const hoveredPixelRef = useRef<PixelCoord | null>(null);
+  const [hoveredPixel, setHoveredPixel] = useState<PixelCoord | null>(null);
 
   const pixelCanvasRefObj = {
     getPixelOfMouseEvent: (e: MouseEvent) => {
@@ -45,52 +47,45 @@ function PixelCanvas(
 
   useImperativeHandle(ref, () => pixelCanvasRefObj);
 
-  function getCanvasContext() {
-
-    const canvas = canvasRef.current;
-    if (canvas === null) return null;
-
-    return canvas.getContext("2d");
-
-  }
-
   useEffect(() => {
 
-    const ctx = getCanvasContext();
+    const canvas = canvasRef.current;
+    if (canvas === null) return;
+
+    const ctx = canvas.getContext("2d");
     if (ctx === null) return;
 
     ctx.putImageData(imgData, 0, 0);
 
+    if (hoverColour === null || hoveredPixel === null) return;
+
+    // With a hover colour and pixel, show this to the user
+
+    const pixData = new Uint8ClampedArray(4);
+    pixData[0] = hoverColour.red;
+    pixData[1] = hoverColour.green;
+    pixData[2] = hoverColour.blue;
+    pixData[3] = 0xff;
+
+    ctx.putImageData(
+      new ImageData(pixData, 1, 1), hoveredPixel.x, hoveredPixel.y
+    );
+
   });
 
-  // Handle on hover visualisation of pixel colour selection
+  // Handle on hover visualisation of pixel colour selection and callback for
+  // hovered pixel
   function onMouseMove(e: MouseEvent) {
-
-    if (onHoverColour === null) return;
 
     const pixel = pixelCanvasRefObj.getPixelOfMouseEvent(e);
 
     if (
-      pixel?.x == hoveredPixelRef.current?.x
-      && pixel?.y == hoveredPixelRef.current?.y
+      pixel?.x == hoveredPixel?.x
+      && pixel?.y == hoveredPixel?.y
     ) return;
 
-    hoveredPixelRef.current = pixel;
-
-    // Start by placing pixel canvas data before adding single pixel overlay
-    const ctx = getCanvasContext();
-    if (ctx === null) return;
-    ctx.putImageData(imgData, 0, 0);
-
-    if (pixel === null) return;
-
-    const pixData = new Uint8ClampedArray(4);
-    pixData[0] = onHoverColour.red;
-    pixData[1] = onHoverColour.green;
-    pixData[2] = onHoverColour.blue;
-    pixData[3] = 0xff;
-
-    ctx.putImageData(new ImageData(pixData, 1, 1), pixel.x, pixel.y);
+    setHoveredPixel(pixel);
+    onPixelHover(pixel);
 
   }
 

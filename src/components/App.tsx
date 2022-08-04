@@ -3,7 +3,7 @@ import {Fragment, useState, MouseEvent, useRef} from "react";
 import Camera from "./Camera";
 import PixelModal, {PixelModalData} from "./PixelModal";
 import PixelCanvas, {PixelCanvasRef} from "./PixelCanvas";
-import {Colour, PixelColour} from "coin-canvas-lib";
+import {Colour, PixelColour, PixelCoord} from "coin-canvas-lib";
 import Palette from "./Palette";
 import useCanvas from "../hooks/useCanvas";
 
@@ -13,6 +13,7 @@ export default function App() {
   const [canvasData, dispatchCanvas] = useCanvas();
   const [pixel, setPixel] = useState<PixelModalData | null>(null);
   const [colourDrop, setColourDrop] = useState<Colour | null>(null);
+  const [pixelCoord, setPixelCoord] = useState<PixelCoord | null>(null);
   const canvasRef = useRef<PixelCanvasRef>(null);
 
   const { imgData, error } = canvasData;
@@ -35,12 +36,12 @@ export default function App() {
 
     if (canvasRef.current === null) return;
 
-    const pixelCoord = canvasRef.current.getPixelOfMouseEvent(e);
-    if (pixelCoord === null) return;
+    const clickCoord = canvasRef.current.getPixelOfMouseEvent(e);
+    if (clickCoord === null) return;
 
     setPixel({
-      x: pixelCoord.x,
-      y: pixelCoord.y,
+      x: clickCoord.x,
+      y: clickCoord.y,
       // TODO: Obtain actual pixel data
       colours: [...Array(16).keys()].map(i => ({
         balance: BigInt(i),
@@ -62,13 +63,18 @@ export default function App() {
     dispatchCanvas(pixelColour);
   }
 
+  function padCoord(n: number) {
+    return n.toString().padStart(3, "0");
+  }
+
   return (
     <Fragment>
       <Camera onClick={handleCanvasClick}>
         <PixelCanvas
           imgData={imgData}
           ref={canvasRef}
-          onHoverColour={colourDrop}
+          hoverColour={colourDrop}
+          onPixelHover={setPixelCoord}
         />
       </Camera>
       {
@@ -78,6 +84,17 @@ export default function App() {
             <div className="canvas-error">
               Lost connection{errorReason}
               <div><small>Updates will not be shown</small></div>
+            </div>
+          )
+      }
+      {
+        pixelCoord === null
+          ? null
+          : (
+            <div className="coordinates-container">
+              <div className="coordinates">
+                ({padCoord(pixelCoord.x)}, {padCoord(pixelCoord.y)})
+              </div>
             </div>
           )
       }
