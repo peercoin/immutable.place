@@ -1,40 +1,35 @@
-import {Fragment, useState, MouseEvent, useRef, useReducer} from "react";
+import "./App.scss";
+import {Fragment, useState, MouseEvent, useRef} from "react";
 import Camera from "./Camera";
 import PixelModal, {PixelModalData} from "./PixelModal";
 import PixelCanvas, {PixelCanvasRef} from "./PixelCanvas";
 import {Colour, PixelColour} from "coin-canvas-lib";
 import Palette from "./Palette";
-
-const CANVAS_HEIGHT = 1000;
-const CANVAS_WIDTH = 1000;
-
-// Temporary random pixels
-const testData = new Uint8ClampedArray(1000*1000*4);
-for (let i = 0; i < 1000000; i++) {
-  const c = Colour.fromId(Math.floor(Math.random() * 16));
-  testData[i*4] = 255;
-  testData[i*4+1] = 255;
-  testData[i*4+2] = 255;
-  testData[i*4+3] = 255;
-}
-
-// Reduce the canvas state using new pixel information
-function canvasReducer(data: Uint8ClampedArray, action: PixelColour) {
-  const offset = (action.coord.x + action.coord.y*CANVAS_WIDTH)*4;
-  data[offset] = action.colour.red;
-  data[offset + 1] = action.colour.green;
-  data[offset + 2] = action.colour.blue;
-  return data;
-}
+import useCanvas from "../hooks/useCanvas";
 
 /* eslint-disable max-lines-per-function */
 export default function App() {
 
-  const [canvasData, dispatchCanvas] = useReducer(canvasReducer, testData);
-
+  const [canvasData, dispatchCanvas] = useCanvas();
   const [pixel, setPixel] = useState<PixelModalData | null>(null);
   const [colourDrop, setColourDrop] = useState<Colour | null>(null);
   const canvasRef = useRef<PixelCanvasRef>(null);
+
+  const { imgData, error } = canvasData;
+  const errorReason = error === null || error === ""
+    ? ""
+    : `: ${error}`;
+
+  if (imgData === null)
+    return (
+      <div className="load-screen">
+        {
+          error === null
+            ? "Loading..."
+            : `Connection Error${errorReason}`
+        }
+      </div>
+    );
 
   function handleCanvasClick(e: MouseEvent) {
 
@@ -56,8 +51,6 @@ export default function App() {
 
   }
 
-  const imgData = new ImageData(canvasData, CANVAS_WIDTH, CANVAS_HEIGHT);
-
   function clearPixel() {
     setPixel(null);
     // Remove colour selection when modal closes
@@ -78,6 +71,16 @@ export default function App() {
           onHoverColour={colourDrop}
         />
       </Camera>
+      {
+        error === null
+          ? null
+          : (
+            <div className="canvas-error">
+              Lost connection{errorReason}
+              <div><small>Updates will not be shown</small></div>
+            </div>
+          )
+      }
       <Palette
         selectedColour={colourDrop}
         onSelection={setColourDrop}

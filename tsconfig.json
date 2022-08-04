@@ -5,9 +5,10 @@
         "moduleResolution": "node",
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
-        "rootDir": "src",
+        "rootDir": ".",
         "outDir": "build",
-        "jsx": "react-jsx"
+        "jsx": "react-jsx",
+        "resolveJsonModule": true
     },
 }
 
