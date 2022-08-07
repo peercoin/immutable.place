@@ -184,20 +184,35 @@ class TransformContext extends Component<
   // Propagate mouse events to onPanningStart and onPanning only when mouse has
   // moved significantly
 
+  private isPanningEventAllowed() {
+    return !this.setup.disabled
+      && this.isPressingKeys(this.setup.panning.activationKeys);
+  }
+
   private onMouseDown = (event: MouseEvent): void => {
+
+    if (!this.isPanningEventAllowed()) return;
+    if (!isPanningStartAllowed(this, event)) return;
+
     this.mouseDownEvent = event;
     event.preventDefault();
     event.stopPropagation();
+
   };
 
   private onMouseMove = (event: MouseEvent): void => {
+
+    if (!this.isPanningEventAllowed()) return;
+    // Ensure we are either panning or have an allowed event already
+    if (!this.isPanning && this.mouseDownEvent === null) return;
 
     event.preventDefault();
     event.stopPropagation();
 
     if (this.isPanning) {
       // Passthrough
-      this.onPanning(event);
+      if (isPanningAllowed(this))
+        this.onPanning(event);
       return;
     }
 
@@ -219,59 +234,26 @@ class TransformContext extends Component<
   // Pre-existing methods to only be called once mouse has move significantly
 
   private onPanningStart = (event: MouseEvent): void => {
-    const { disabled } = this.setup;
-    const { onPanningStart } = this.props;
-    if (disabled) {
-      return;
-    }
-
-    const isAllowed = isPanningStartAllowed(this, event);
-    if (!isAllowed) {
-      return;
-    }
-
-    const keysPressed = this.isPressingKeys(this.setup.panning.activationKeys);
-    if (!keysPressed) {
-      return;
-    }
-
     handleCancelAnimation(this);
     handlePanningStart(this, event);
-    handleCallback(getContext(this), event, onPanningStart);
+    handleCallback(getContext(this), event, this.props.onPanningStart);
   };
 
   private onPanning = (event: MouseEvent): void => {
-    const { disabled } = this.setup;
-    const { onPanning } = this.props;
-
-    if (disabled) {
-      return;
-    }
-
-    const isAllowed = isPanningAllowed(this);
-    if (!isAllowed) {
-      return;
-    }
-
-    const keysPressed = this.isPressingKeys(this.setup.panning.activationKeys);
-    if (!keysPressed) {
-      return;
-    }
-
     handlePanning(this, event.clientX, event.clientY);
-    handleCallback(getContext(this), event, onPanning);
+    handleCallback(getContext(this), event, this.props.onPanning);
   };
 
   private onPanningStop = (event: MouseEvent | TouchEvent): void => {
-    const { onPanningStop } = this.props;
 
     // Do not need to keep track of mouse down event any more
     this.mouseDownEvent = null;
 
     if (this.isPanning) {
       handlePanningEnd(this);
-      handleCallback(getContext(this), event, onPanningStop);
+      handleCallback(getContext(this), event, this.props.onPanningStop);
     }
+
   };
 
   // Pinch
@@ -280,14 +262,10 @@ class TransformContext extends Component<
     const { disabled } = this.setup;
     const { onPinchingStart, onZoomStart } = this.props;
 
-    if (disabled) {
-      return;
-    }
+    if (disabled) return;
 
     const isAllowed = isPinchStartAllowed(this, event);
-    if (!isAllowed) {
-      return;
-    }
+    if (!isAllowed) return;
 
     handlePinchStart(this, event);
     handleCancelAnimation(this);
@@ -299,14 +277,10 @@ class TransformContext extends Component<
     const { disabled } = this.setup;
     const { onPinching, onZoom } = this.props;
 
-    if (disabled) {
-      return;
-    }
+    if (disabled) return;
 
     const isAllowed = isPinchAllowed(this);
-    if (!isAllowed) {
-      return;
-    }
+    if (!isAllowed) return;
 
     event.preventDefault();
     event.stopPropagation();
@@ -332,15 +306,11 @@ class TransformContext extends Component<
     const { disabled } = this.setup;
     const { onPanningStart } = this.props;
 
-    if (disabled) {
-      return;
-    }
+    if (disabled) return;
 
     const isAllowed = isPanningStartAllowed(this, event);
 
-    if (!isAllowed) {
-      return;
-    }
+    if (!isAllowed) return;
 
     const isDoubleTap =
       this.lastTouch !== null && new Date().valueOf() - this.lastTouch < 200;
@@ -373,14 +343,10 @@ class TransformContext extends Component<
     const { onPanning } = this.props;
 
     if (this.isPanning && event.touches.length === 1) {
-      if (disabled) {
-        return;
-      }
+      if (disabled) return;
 
       const isAllowed = isPanningAllowed(this);
-      if (!isAllowed) {
-        return;
-      }
+      if (!isAllowed) return;
 
       event.preventDefault();
       event.stopPropagation();
@@ -402,14 +368,10 @@ class TransformContext extends Component<
 
   private onDoubleClick = (event: MouseEvent | TouchEvent): void => {
     const { disabled } = this.setup;
-    if (disabled) {
-      return;
-    }
+    if (disabled) return;
 
     const isAllowed = isDoubleClickAllowed(this, event);
-    if (!isAllowed) {
-      return;
-    }
+    if (!isAllowed) return;
 
     handleDoubleClick(this, event);
   };
@@ -424,12 +386,9 @@ class TransformContext extends Component<
     this.pressedKeys[e.key] = false;
   };
 
-  private isPressingKeys = (keys: Array<string>): boolean => {
-    if (keys.length === 0) {
-      return true;
-    }
-    return keys.some(key => this.pressedKeys[key]);
-  };
+  private isPressingKeys = (
+    keys: Array<string>
+  ): boolean => keys.length === 0 || keys.some(key => this.pressedKeys[key]);
 
   private setComponents = (
     wrapperComponent: HTMLDivElement,

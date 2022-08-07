@@ -21,17 +21,8 @@ export function isPanningStartAllowed(
   const isWrapperChild = wrapperComponent?.contains(target) ?? false;
   const isAllowed = isInitialized && target !== null && isWrapperChild;
 
-  if (!isAllowed) {
-    return false;
-  }
+  return isAllowed && !isExcludedNode(target, excluded);
 
-  const isExcluded = isExcludedNode(target, excluded);
-
-  if (isExcluded) {
-    return false;
-  }
-
-  return true;
 }
 
 export function isPanningAllowed(
@@ -40,13 +31,7 @@ export function isPanningAllowed(
   const { isInitialized, isPanning, setup } = contextInstance;
   const { disabled } = setup.panning;
 
-  const isAllowed = isInitialized && isPanning && !disabled;
-
-  if (!isAllowed) {
-    return false;
-  }
-
-  return true;
+  return isInitialized && isPanning && !disabled;
 }
 
 export function handlePanningSetup(
