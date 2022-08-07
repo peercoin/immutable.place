@@ -1,7 +1,7 @@
 import "./App.scss";
 import {Fragment, useState, MouseEvent, useRef} from "react";
 import Camera from "./Camera";
-import PixelModal, {PixelModalData} from "./PixelModal";
+import PixelModal from "./PixelModal";
 import PixelCanvas, {PixelCanvasRef} from "./PixelCanvas";
 import {Colour, PixelColour, PixelCoord} from "coin-canvas-lib";
 import Palette from "./Palette";
@@ -10,8 +10,8 @@ import useCanvas from "../hooks/useCanvas";
 /* eslint-disable max-lines-per-function */
 export default function App() {
 
-  const [canvasData, dispatchCanvas] = useCanvas();
-  const [pixel, setPixel] = useState<PixelModalData | null>(null);
+  const [canvasData, dispatchCanvas, client] = useCanvas();
+  const [pixel, setPixel] = useState<PixelCoord | null>(null);
   const [colourDrop, setColourDrop] = useState<Colour | null>(null);
   const [pixelCoord, setPixelCoord] = useState<PixelCoord | null>(null);
   const canvasRef = useRef<PixelCanvasRef>(null);
@@ -41,13 +41,7 @@ export default function App() {
 
     setPixel({
       x: clickCoord.x,
-      y: clickCoord.y,
-      // TODO: Obtain actual pixel data
-      colours: [...Array(16).keys()].map(i => ({
-        balance: BigInt(i),
-        address: "tpc1qcanvas0000000000000000000000000000000000000qqqqqqqqq8e09fm",
-        colour: Colour.fromId(i)
-      }))
+      y: clickCoord.y
     });
 
   }
@@ -105,12 +99,13 @@ export default function App() {
       <PixelModal
         pixel={pixel}
         imgData={imgData}
+        client={client}
         onCancel={clearPixel}
         onConfirm={confirmedPixel}
-        selectColourData={
+        dropColour={
           (colourDrop === null || pixel === null)
             ? null
-            : pixel.colours[colourDrop.id]
+            : colourDrop
         }
       />
     </Fragment>

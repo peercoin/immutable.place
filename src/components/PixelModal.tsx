@@ -1,7 +1,9 @@
 import "./PixelModal.scss";
 import Modal from "./Modal";
-import {Colour, PixelData, PixelColourData, PixelCoord, PixelColour} from "coin-canvas-lib";
-import {useEffect, useRef, useState} from "react";
+import {
+  Colour, PixelData, PixelCoord, PixelColour, CoinCanvasClient
+} from "coin-canvas-lib";
+import {Fragment, useEffect, useRef, useState} from "react";
 import PixelColourSelection from "./PixelColourSelection";
 import PixelColourPayment from "./PixelColourPayment";
 
@@ -10,22 +12,20 @@ const PREVIEW_RADIUS = 3;
 const PREVIEW_WIDTH = PREVIEW_RADIUS*2+1;
 const PREVIEW_PIXEL_N = PREVIEW_WIDTH**2;
 
-export interface PixelModalData extends PixelCoord {
-  colours: PixelData
-}
-
 /* eslint-disable max-lines-per-function */
 export default function PixelModal(
   {
     pixel = null,
     imgData,
-    selectColourData = null,
+    client,
+    dropColour = null,
     onCancel = () => undefined,
     onConfirm = () => undefined
   }: {
-    pixel?: PixelModalData | null,
+    pixel?: PixelCoord | null,
     imgData: ImageData,
-    selectColourData?: PixelColourData | null,
+    client: CoinCanvasClient | null,
+    dropColour?: Colour | null,
     onCancel?: () => void,
     onConfirm?: (pixelColour: PixelColour) => void,
   }
@@ -41,13 +41,14 @@ export default function PixelModal(
 
   // This state only tracks colours selected by the button. The colour can also
   // be passed as the selectColour prop
-  const [selectedColourData, setSelectedColourData] = useState<PixelColourData | null>(null);
+  const [selectedColour, setSelectedColour] = useState<Colour | null>(null);
   const [hoverColour, setHoverColour] = useState<Colour | null>(null);
 
-  function getSelectedColourData() {
-    return selectColourData ?? selectedColourData;
+  function getSelectedColour() {
+    return dropColour ?? selectedColour;
   }
 
+  // Show previous canvas
   useEffect(() => {
 
     if (pixel === null) return;
@@ -83,7 +84,7 @@ export default function PixelModal(
 
     }
 
-    const showColour = getSelectedColourData()?.colour ?? hoverColour;
+    const showColour = getSelectedColour() ?? hoverColour;
 
     if (showColour !== null) {
       const midOff = Math.floor(PREVIEW_PIXEL_N / 2)*4;
@@ -96,31 +97,90 @@ export default function PixelModal(
 
   });
 
+  // Load pixel data and update when image data changes
+  const [pixelData, setPixelData] = useState<PixelData | null>(null);
+  const [requestError, setRequestError] = useState<string | null>(null);
+  useEffect(() => {
+    if (pixel === null) return;
+    client?.pixel(pixel)
+      .then(setPixelData)
+      .catch(e => setRequestError(e instanceof Error ? e.message : e.toString()));
+  }, [imgData, pixel, client]);
+
   // Render if there is a pixel
-
   if (pixel === null) return null;
-
-  const colourData = getSelectedColourData();
 
   // Infer active colour from RGB value
   const activeOffset = (pixel.x + pixel.y*imgData.width)*4;
-  const activeColour = pixel.colours.find(
-    cd => cd.colour.red == imgData.data[activeOffset]
-    && cd.colour.green == imgData.data[activeOffset+1]
-    && cd.colour.blue == imgData.data[activeOffset+2]
+  const activeColour = Colour.palette().find(
+    c => c.red == imgData.data[activeOffset]
+    && c.green == imgData.data[activeOffset+1]
+    && c.blue == imgData.data[activeOffset+2]
   );
-
-  if (activeColour === undefined) return null;
 
   function cleanup() {
     // Ensure the next time the modal is opened, there is no slected colour
-    setSelectedColourData(null);
+    setSelectedColour(null);
     setHoverColour(null);
+    setRequestError(null);
+    setPixelData(null);
   }
 
   function cancel() {
     cleanup();
     onCancel();
+  }
+
+  function getPixelColourData(c: Colour | undefined) {
+    if (c === undefined) return null;
+    const colourData = pixelData?.find(pcd => pcd.colour.id == c.id);
+    if (colourData === undefined) return null;
+    return colourData;
+  }
+
+  function getContent() {
+
+    if (pixel === null) return null;
+
+    if (requestError !== null) {
+      return (
+        <div className="modal-error">
+          <p>Sorry, the pixel data could not be loaded. Please try again later.</p>
+          <p>{requestError}</p>
+        </div>
+      );
+    }
+
+    if (pixelData === null) {
+      return <div className="modal-loading"><p>Loading...</p></div>;
+    }
+
+    const newColour = getSelectedColour();
+
+    if (newColour === null) {
+      return <PixelColourSelection
+        colours={pixelData}
+        onHoverColour={setHoverColour}
+        onSelectColour={setSelectedColour}
+      />;
+    }
+
+    const activeColourData = getPixelColourData(activeColour);
+    const newColourData = getPixelColourData(newColour);
+
+    if (activeColourData === null || newColourData === null) return null;
+
+    return <PixelColourPayment
+      pixel={pixel}
+      colourData={newColourData}
+      activeColourData={activeColourData}
+      onCancel={cancel}
+      onConfirm={() => {
+        cleanup();
+        onConfirm(new PixelColour(pixel, newColour.id));
+      }}
+    />;
+
   }
 
   return (
@@ -130,24 +190,7 @@ export default function PixelModal(
       open={true}
       onClose={cancel}
     >
-      {
-        colourData === null
-          ? <PixelColourSelection
-            colours={pixel.colours}
-            onHoverColour={setHoverColour}
-            onSelectColourData={setSelectedColourData}
-          />
-          : <PixelColourPayment
-            pixel={pixel}
-            colourData={colourData}
-            activeColour={activeColour}
-            onCancel={cancel}
-            onConfirm={() => {
-              cleanup();
-              onConfirm(new PixelColour(pixel, colourData.colour.id));
-            }}
-          />
-      }
+      {getContent()}
     </Modal>
   );
 

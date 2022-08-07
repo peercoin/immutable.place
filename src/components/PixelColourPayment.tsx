@@ -1,47 +1,45 @@
 import "./PixelColourPayment.scss";
-import {PixelColourData} from "coin-canvas-lib";
+import {PixelColourData, PixelCoord} from "coin-canvas-lib";
 import {satsToCoinString} from "../utils/coin";
 import {Fragment} from "react";
 import {QRCodeSVG} from "qrcode.react";
-import {PixelModalData} from "./PixelModal";
 
 const MIN_AMOUNT = BigInt(10000);
 
 /* eslint-disable max-lines-per-function */
 export default function PixelColourPayment(
   {
-    pixel, colourData, activeColour, onCancel, onConfirm
+    pixel, colourData, activeColourData, onCancel, onConfirm
   }: {
-    pixel: PixelModalData,
+    pixel: PixelCoord,
     colourData: PixelColourData,
-    activeColour: PixelColourData,
+    activeColourData: PixelColourData,
     onCancel: () => void,
     onConfirm: () => void
   }
 ) {
 
-  const maxReceived = activeColour.balance;
-
+  const maxReceived = activeColourData.balance;
   const selectedReceived = colourData.balance;
+
   const diffPlusOne = maxReceived - selectedReceived + BigInt(1);
   const toPay = diffPlusOne > MIN_AMOUNT ? diffPlusOne : MIN_AMOUNT;
 
-  const newColour = activeColour === undefined
-    || activeColour.colour.id !== colourData.colour.id;
+  const isNewColour = activeColourData.colour.id !== colourData.colour.id;
 
   const amtStr = satsToCoinString(toPay, { short: true });
   const colourName = colourData.colour.name;
   const capitalColour = colourName.charAt(0).toUpperCase() + colourName.slice(1);
   const label = `Pixel%20(${pixel.x},%20${pixel.y})%20${capitalColour}`;
 
-  const amtSegment = newColour ? `amount=${amtStr}&` : "";
+  const amtSegment = isNewColour ? `amount=${amtStr}&` : "";
   const uri = `peercoin:${colourData.address}?${amtSegment}label=${label}`;
 
   return (
     <Fragment>
       <p>
         {
-          newColour
+          isNewColour
             ? <Fragment>
               To change the colour to {colourName}, please pay a minimum
               of {amtStr} PPC to the following address. You can scan the QR code
@@ -57,7 +55,7 @@ export default function PixelColourPayment(
       </p>
       <p className="payment-details">
         {
-          newColour
+          isNewColour
             ? <Fragment><b>Required Amount</b>: {amtStr} PPC<br/></Fragment>
             : null
         }

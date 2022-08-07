@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 
 import {Canvas, CoinCanvasClient, PixelColour} from "coin-canvas-lib";
-import {Dispatch, useEffect, useReducer} from "react";
+import {Dispatch, useEffect, useReducer, useState} from "react";
 import CONFIG from "../config";
 
 class CanvasData {
@@ -55,15 +55,17 @@ function canvasReducer(
 
 }
 
-export default function useCanvas() : [CanvasData, Dispatch<PixelColour>] {
+export default function useCanvas()
+: [CanvasData, Dispatch<PixelColour>, CoinCanvasClient | null] {
 
   const [canvasData, dispatchCanvas] = useReducer(
     canvasReducer, new CanvasData(null, null)
   );
+  const [client, setClient] = useState<CoinCanvasClient | null>(null);
 
   useEffect(() => {
 
-    const client = new CoinCanvasClient({
+    const localClient = new CoinCanvasClient({
       ...CONFIG,
       onFullCanvas: dispatchCanvas,
       onUpdatedPixels: dispatchCanvas,
@@ -71,12 +73,13 @@ export default function useCanvas() : [CanvasData, Dispatch<PixelColour>] {
         dispatchCanvas(new CanvasError(what));
       }
     });
+    setClient(localClient);
 
-    return () => client.close();
+    return () => localClient?.close();
 
   }, []);
 
-  return [canvasData, dispatchCanvas];
+  return [canvasData, dispatchCanvas, client];
 
 }
 

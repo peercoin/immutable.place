@@ -1,4 +1,4 @@
-import {Colour, PixelData, PixelColourData} from "coin-canvas-lib";
+import {Colour, PixelData} from "coin-canvas-lib";
 import {satsToCoinString} from "../utils/coin";
 import {Fragment} from "react";
 
@@ -7,11 +7,11 @@ export default function PixelColourSelection(
   {
     colours,
     onHoverColour,
-    onSelectColourData
+    onSelectColour
   }: {
     colours: PixelData,
     onHoverColour: (c: Colour | null) => void,
-    onSelectColourData: (c: PixelColourData) => void
+    onSelectColour: (c: Colour) => void
   }
 ) {
 
@@ -29,7 +29,7 @@ export default function PixelColourSelection(
       key={data.colour.id.toString()}
       onMouseEnter={() => onHoverColour(data.colour)}
       onMouseLeave={() => onHoverColour(null)}
-      onClick={() => onSelectColourData(data)}
+      onClick={() => onSelectColour(data.colour)}
     >
       <div className="pixel-colour" style={{ background: data.colour.cssStr }}></div>
       <div className="pixel-colour-name">{ data.colour.name }</div>
