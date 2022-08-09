@@ -32,14 +32,7 @@ export default function useMovement(onMove: (x: number, y:number) => void) {
 
       const move = moveRef.current;
       const prevTs = tsRef.current;
-      if (move === null) return;
-
-      if (prevTs === null) {
-        // Start animation
-        tsRef.current = ts;
-        requestAnimationFrame(movePos);
-        return;
-      }
+      if (prevTs === null) return;
 
       // Make movement equal to seconds passed
       const moveAmt = (ts - prevTs) / 1000;
@@ -85,7 +78,8 @@ export default function useMovement(onMove: (x: number, y:number) => void) {
 
     function adjustKeys(e: KeyboardEvent, setTo: boolean) {
 
-      if (moveRef.current === null) return;
+      // Do nothing if this is a key repeat
+      if (e.repeat) return;
 
       function set(bit: number) {
         if (setTo) moveRef.current |= bit;
@@ -100,14 +94,31 @@ export default function useMovement(onMove: (x: number, y:number) => void) {
         set(MOVE_RIGHT);
       } else if (e.key == KEY_DOWN) {
         set(MOVE_DOWN);
-      }
+      } else return;
 
-      requestAnimationFrame(movePos);
+      // Request animation frame if there is no current animation
+      if (tsRef.current === null) {
+        // Start animation
+        tsRef.current = performance.now();
+        requestAnimationFrame(movePos);
+      }
 
     }
 
-    addEventListener("keydown", e => adjustKeys(e, true));
-    addEventListener("keyup", e => adjustKeys(e, false));
+    function onKeyDown(e: KeyboardEvent) {
+      return adjustKeys(e, true);
+    }
+    function onKeyUp(e: KeyboardEvent) {
+      return adjustKeys(e, false);
+    }
+
+    addEventListener("keydown", onKeyDown);
+    addEventListener("keyup", onKeyUp);
+
+    return () => {
+      removeEventListener("keydown", onKeyDown);
+      removeEventListener("keyup", onKeyUp);
+    };
 
   });
 
