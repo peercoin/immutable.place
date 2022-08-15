@@ -66,20 +66,28 @@ export default function PixelColourPayment(
         value={uri}
         bgColor="#0000"
       />
-      <p>
-        <small>
-          All payments will be counted, even if you press "Cancel". By
-          confirming that you have made payment, this will keep the pixel
-          painted until it is refreshed or updated.
-        </small>
-      </p>
+      {
+        isNewColour
+          ? <p>
+            <small>
+              All payments will be counted, even if you press "Cancel". By
+              confirming that you have made payment, this will keep the pixel
+              painted until it is refreshed or updated.
+            </small>
+          </p>
+          : null
+      }
       <p>
         <small>Payments are subject to the Terms of Use.</small>
       </p>
-      <div className="payment-buttons">
-        <button className="payment-cancel" onClick={onCancel}>Cancel</button>
-        <button className="payment-confirm" onClick={onConfirm}>I have made payment</button>
-      </div>
+      {
+        isNewColour
+          ? <div className="payment-buttons">
+            <button className="payment-cancel" onClick={onCancel}>Cancel</button>
+            <button className="payment-confirm" onClick={onConfirm}>I have made payment</button>
+          </div>
+          : null
+      }
     </Fragment>
   );
 
