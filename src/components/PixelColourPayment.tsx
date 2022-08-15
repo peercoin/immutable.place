@@ -74,9 +74,10 @@ export default function PixelColourPayment(
         isNewColour
           ? <p>
             <small>
-              All payments will be counted, even if you press "Cancel". By
-              confirming that you have made payment, this will keep the pixel
-              painted until it is refreshed or updated.
+              All confirmed payments will be counted, even if you press
+              "Cancel". By clicking "I have made payment", the pixel will remain
+              painted until it is refreshed or updated, but otherwise your
+              transaction will not be counted until it is confirmed.
             </small>
           </p>
           : null
