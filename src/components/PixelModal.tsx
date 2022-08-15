@@ -47,7 +47,7 @@ export default function PixelModal(
 
   // Infer active colour from RGB value
   const activeOffset = (pixel.x + pixel.y*imgData.width)*4;
-  const activeColour = Colour.palette().find(
+  const activeColour = Colour.palette.find(
     c => c.red == imgData.data[activeOffset]
     && c.green == imgData.data[activeOffset+1]
     && c.blue == imgData.data[activeOffset+2]

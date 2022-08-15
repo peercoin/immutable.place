@@ -11,14 +11,12 @@ export default function Palette(
   }
 ) {
 
-  const colours = Colour.palette();
-
   function onColourClick(c: Colour) {
     const didSelect = c.id == selectedColour?.id;
     onSelection(didSelect ? null : c);
   }
 
-  const colourDivs = colours.map(
+  const colourDivs = Colour.palette.map(
     c => <div
       className={`palette-colour ${c.id == selectedColour?.id ? "selected" : ""}`}
       style={{ background: c.cssStr }}
