@@ -11,7 +11,7 @@ import useCanvas from "../hooks/useCanvas";
 export default function App() {
 
   const [canvasData, dispatchCanvas, client] = useCanvas();
-  const [pixel, setPixel] = useState<PixelCoord | null>(null);
+  const [modalPixel, setModalPixel] = useState<PixelCoord | null>(null);
   const [colourDrop, setColourDrop] = useState<Colour | null>(null);
   const [pixelCoord, setPixelCoord] = useState<PixelCoord | null>(null);
   const canvasRef = useRef<PixelCanvasRef>(null);
@@ -39,7 +39,7 @@ export default function App() {
     const clickCoord = canvasRef.current.getPixelOfMouseEvent(e);
     if (clickCoord === null) return;
 
-    setPixel({
+    setModalPixel({
       x: clickCoord.x,
       y: clickCoord.y
     });
@@ -47,7 +47,7 @@ export default function App() {
   }
 
   function clearPixel() {
-    setPixel(null);
+    setModalPixel(null);
     // Remove colour selection when modal closes
     setColourDrop(null);
   }
@@ -97,13 +97,13 @@ export default function App() {
         onSelection={setColourDrop}
       />
       <PixelModal
-        pixel={pixel}
+        pixel={modalPixel}
         imgData={imgData}
         client={client}
         onCancel={clearPixel}
         onConfirm={confirmedPixel}
         dropColour={
-          (colourDrop === null || pixel === null)
+          (colourDrop === null || modalPixel === null)
             ? null
             : colourDrop
         }
