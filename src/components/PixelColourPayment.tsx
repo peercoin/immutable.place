@@ -19,15 +19,19 @@ export default function PixelColourPayment(
   }
 ) {
 
-  const maxReceived = activeColourData.balance;
-  const selectedReceived = colourData.balance;
-
-  const diffPlusOne = maxReceived - selectedReceived + BigInt(1);
-  const toPay = diffPlusOne > MIN_AMOUNT ? diffPlusOne : MIN_AMOUNT;
-
   const isNewColour = activeColourData.colour.id !== colourData.colour.id;
 
-  const amtStr = satsToCoinString(toPay, { short: true });
+  let amtStr = "";
+
+  if (isNewColour) {
+    // Calculate the required amount for the new colour
+    const maxReceived = activeColourData.balance;
+    const selectedReceived = colourData.balance;
+    const diffPlusOne = maxReceived - selectedReceived + BigInt(1);
+    const toPay = diffPlusOne > MIN_AMOUNT ? diffPlusOne : MIN_AMOUNT;
+    amtStr = satsToCoinString(toPay, { short: true });
+  }
+
   const colourName = colourData.colour.name;
   const capitalColour = colourName.charAt(0).toUpperCase() + colourName.slice(1);
   const label = `Pixel%20(${pixel.x},%20${pixel.y})%20${capitalColour}`;
