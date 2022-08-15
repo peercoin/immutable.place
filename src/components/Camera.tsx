@@ -28,11 +28,7 @@ export default function Camera(
 
   const [clickable, setClickable] = useState(false);
 
-  function handleNewScale(transformer: ReactZoomPanPinchRef) {
-    setClickable(transformer.state.scale >= CLICK_SCALE_THRESHOLD);
-  }
-
-  const randomPosition = useCallback((transformer: ReactZoomPanPinchRef) => {
+  const setRandomPosition = useCallback((transformer: ReactZoomPanPinchRef) => {
 
     // Set initial position to random
     // Use the bounds object which goes into the negative and doesn't make much
@@ -53,12 +49,19 @@ export default function Camera(
 
   }, []);
 
+  // Handle setting an initial position and clickable state when the underlying
+  // ref changes
   const [
     transformRef,
     transformRefCallback
   ] = useRefInitialCallback<ReactZoomPanPinchRef>(
-    randomPosition, handleNewScale // handleNewScale is called on every update
+    // Called initially
+    setRandomPosition,
+    // Called on every update
+    transformer => setClickable(transformer.state.scale >= CLICK_SCALE_THRESHOLD)
   );
+
+  // Code relating to arrow key movement
 
   function withinBounds(
     newVal: number, minVal: number | undefined, maxVal: number | undefined
