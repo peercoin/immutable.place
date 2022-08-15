@@ -42,17 +42,12 @@ export default function CanvasPreview(
       const srcX = pixel.x + (i % PREVIEW_WIDTH) - PREVIEW_RADIUS;
       const srcY = pixel.y + Math.floor(i / PREVIEW_WIDTH) - PREVIEW_RADIUS;
 
-      if (srcX < 0 || srcX >= imgData.width || srcY < 0 || srcY >= imgData.height) {
-        previewData[i*4] = 255;
-        previewData[i*4+1] = 255;
-        previewData[i*4+2] = 255;
-        previewData[i*4+3] = 255;
-      } else {
+      // If within canvas, set to colour or else white.
+      if (srcX >= 0 && srcX < imgData.width && srcY >= 0 && srcY < imgData.height) {
         const srcOff = (srcX + srcY*imgData.width)*4;
-        previewData[i*4] = fullData[srcOff];
-        previewData[i*4+1] = fullData[srcOff+1];
-        previewData[i*4+2] = fullData[srcOff+2];
-        previewData[i*4+3] = 255;
+        previewData.set(fullData.subarray(srcOff, srcOff+4), i*4);
+      } else {
+        previewData.fill(255, i*4, i*4+4);
       }
 
     }
