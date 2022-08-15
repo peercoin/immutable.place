@@ -2,7 +2,7 @@ import {Colour, PixelCoord} from "coin-canvas-lib";
 import {
   ForwardedRef, forwardRef, useEffect, useImperativeHandle, useRef, MouseEvent, useState
 } from "react";
-import "./PixelCanvas.css";
+import "./PixelCanvas.scss";
 
 export interface PixelCanvasRef {
   getPixelOfMouseEvent: (e: MouseEvent) => PixelCoord | null;

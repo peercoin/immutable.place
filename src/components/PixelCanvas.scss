@@ -1,0 +1,6 @@
+@use "./mixins.scss";
+
+.pixel-canvas {
+    @include mixins.pixelated-canvas;
+    margin: 20px;
+}
