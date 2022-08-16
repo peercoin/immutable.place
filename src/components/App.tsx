@@ -46,23 +46,21 @@ export default function App() {
 
   }
 
-  function clearPixel() {
+  function handleMove() {
+    canvasRef.current?.notifyMove();
+  }
+
+  function handleModalClose() {
     setModalPixel(null);
-    // Remove colour selection when modal closes
-    setColourDrop(null);
   }
 
   function confirmedPixel(pixelColour: PixelColour) {
-    clearPixel();
+    handleModalClose();
     dispatchCanvas(pixelColour);
   }
 
   function padCoord(n: number) {
     return n.toString().padStart(3, "0");
-  }
-
-  function handleMove() {
-    canvasRef.current?.notifyMove();
   }
 
   return (
@@ -73,6 +71,7 @@ export default function App() {
           ref={canvasRef}
           hoverColour={colourDrop}
           onPixelHover={setPixelCoord}
+          activePixel={modalPixel}
         />
       </Camera>
       {
@@ -104,7 +103,7 @@ export default function App() {
         pixel={modalPixel}
         imgData={imgData}
         client={client}
-        onCancel={clearPixel}
+        onCancel={handleModalClose}
         onConfirm={confirmedPixel}
         dropColour={
           (colourDrop === null || modalPixel === null)

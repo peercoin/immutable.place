@@ -15,11 +15,13 @@ function PixelCanvas(
   {
     imgData,
     hoverColour,
-    onPixelHover
+    onPixelHover,
+    activePixel
   }: {
     imgData: ImageData
     hoverColour: Colour | null
-    onPixelHover: (pixel: PixelCoord | null) => void
+    onPixelHover: (pixel: PixelCoord | null) => void,
+    activePixel: PixelCoord | null
   },
   ref: ForwardedRef<PixelCanvasRef>
 ) {
@@ -57,7 +59,10 @@ function PixelCanvas(
     ) return;
 
     setHoveredPixel(pixel);
-    onPixelHover(pixel);
+
+    // Only provide hover pixel when there isn't an active pixel
+    if (activePixel === null)
+      onPixelHover(pixel);
 
   }
 
@@ -91,6 +96,10 @@ function PixelCanvas(
 
     if (hoverColour === null || hoveredPixel === null) return;
 
+    // Show the pixel that is currently provided as "active" or else the pixel
+    // that is being hovered over
+    const pixelToColour = activePixel ?? hoveredPixel;
+
     // With a hover colour and pixel, show this to the user
 
     const pixData = new Uint8ClampedArray(4);
@@ -100,7 +109,7 @@ function PixelCanvas(
     pixData[3] = 0xff;
 
     ctx.putImageData(
-      new ImageData(pixData, 1, 1), hoveredPixel.x, hoveredPixel.y
+      new ImageData(pixData, 1, 1), pixelToColour.x, pixelToColour.y
     );
 
   });
