@@ -18,11 +18,11 @@ const CLICK_ZOOM_SCALE = 15;
  */
 export default function Camera(
   {
-    children,
-    onClick
+    children, onClick, onMoved
   }: {
     children: ReactNode,
-    onClick: (event: MouseEvent) => void
+    onClick: (event: MouseEvent) => void,
+    onMoved: () => void
   }
 ) {
 
@@ -49,6 +49,13 @@ export default function Camera(
 
   }, []);
 
+  const handleChange = useCallback((transformer: ReactZoomPanPinchRef) => {
+    // When the transformer changes, update if the canvas is clickable and
+    // notify parent of potential movement
+    setClickable(transformer.state.scale >= CLICK_SCALE_THRESHOLD);
+    onMoved();
+  }, [onMoved]);
+
   // Handle setting an initial position and clickable state when the underlying
   // ref changes
   const [
@@ -58,7 +65,7 @@ export default function Camera(
     // Called initially
     setRandomPosition,
     // Called on every update
-    transformer => setClickable(transformer.state.scale >= CLICK_SCALE_THRESHOLD)
+    handleChange
   );
 
   // Code relating to arrow key movement
@@ -93,10 +100,13 @@ export default function Camera(
   }
 
   useMovement((x, y) => {
+
     const moveAmtPerSecond = 600;
     const moveX = x*moveAmtPerSecond;
     const moveY = y*moveAmtPerSecond;
+
     makeMovement(moveX, moveY);
+
   });
 
   function handleClick(e: MouseEvent) {

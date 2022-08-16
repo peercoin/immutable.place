@@ -2,9 +2,11 @@ import {Colour, PixelCoord} from "coin-canvas-lib";
 import {
   ForwardedRef, forwardRef, useEffect, useImperativeHandle, useRef, MouseEvent, useState
 } from "react";
+import useCursorRef, {CursorPos} from "../hooks/useCursorRef";
 import "./PixelCanvas.scss";
 
 export interface PixelCanvasRef {
+  notifyMove: () => void;
   getPixelOfMouseEvent: (e: MouseEvent) => PixelCoord | null;
 }
 
@@ -25,24 +27,54 @@ function PixelCanvas(
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hoveredPixel, setHoveredPixel] = useState<PixelCoord | null>(null);
 
+  // Update hovered pixel when mouse moves and ensure cursor position is updated
+
+  function pixelOfCursorPosition(cursor: CursorPos | null): PixelCoord | null {
+
+    const canvas = canvasRef.current;
+    if (canvas === null || cursor === null) return null;
+
+    const rect = canvas.getBoundingClientRect();
+    const x = (cursor.x - rect.left) / (rect.right - rect.left) * canvas.width;
+    const y = (cursor.y - rect.top) / (rect.bottom - rect.top) * canvas.height;
+
+    if (x < 0 || y < 0 || x >= imgData.width || y >= imgData.height) return null;
+
+    return {
+      x: Math.floor(x),
+      y: Math.floor(y)
+    };
+
+  }
+
+  function handleNewCursorPos(cursor: CursorPos | null) {
+
+    const pixel = pixelOfCursorPosition(cursor);
+
+    if (
+      pixel?.x == hoveredPixel?.x
+    && pixel?.y == hoveredPixel?.y
+    ) return;
+
+    setHoveredPixel(pixel);
+    onPixelHover(pixel);
+
+  }
+
+  const cursorRef = useCursorRef(handleNewCursorPos);
+
   const pixelCanvasRefObj = {
-    getPixelOfMouseEvent: (e: MouseEvent) => {
 
-      if (canvasRef.current === null) return null;
-      const canvas = canvasRef.current;
+    // Called whenever the pixel being hovered over may change.
+    // Updates the hovered pixel
+    notifyMove: () => handleNewCursorPos(cursorRef.current),
 
-      const rect = canvas.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
-      const y = (e.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height;
+    // This could be different from the hovered pixel in the event of a tap
+    getPixelOfMouseEvent: (e: MouseEvent) => pixelOfCursorPosition({
+      x: e.clientX,
+      y: e.clientY
+    })
 
-      if (x < 0 || y < 0 || x >= imgData.width || y >= imgData.height) return null;
-
-      return {
-        x: Math.floor(x),
-        y: Math.floor(y)
-      };
-
-    }
   };
 
   useImperativeHandle(ref, () => pixelCanvasRefObj);
@@ -73,30 +105,12 @@ function PixelCanvas(
 
   });
 
-  // Handle on hover visualisation of pixel colour selection and callback for
-  // hovered pixel
-  function onMouseMove(e: MouseEvent) {
-
-    const pixel = pixelCanvasRefObj.getPixelOfMouseEvent(e);
-
-    if (
-      pixel?.x == hoveredPixel?.x
-      && pixel?.y == hoveredPixel?.y
-    ) return;
-
-    setHoveredPixel(pixel);
-    onPixelHover(pixel);
-
-  }
-
   return (
     <canvas
       className="pixel-canvas card"
       ref={canvasRef}
       width={imgData.width}
       height={imgData.height}
-      onMouseMove={onMouseMove}
-      onMouseLeave={onMouseMove}
     />
   );
 

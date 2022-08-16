@@ -61,9 +61,13 @@ export default function App() {
     return n.toString().padStart(3, "0");
   }
 
+  function handleMove() {
+    canvasRef.current?.notifyMove();
+  }
+
   return (
     <Fragment>
-      <Camera onClick={handleCanvasClick}>
+      <Camera onClick={handleCanvasClick} onMoved={handleMove}>
         <PixelCanvas
           imgData={imgData}
           ref={canvasRef}
