@@ -3,6 +3,7 @@ import { handleCallback } from "../../utils/callback.utils";
 import { getContext } from "../../utils/context.utils";
 import { cancelTimeout } from "../../utils/helpers.utils";
 import { handleCancelAnimation } from "../animations/animations.utils";
+import {BoundsMode} from "../bounds/bounds.types";
 import { handleCalculateBounds } from "../bounds/bounds.utils";
 import { handleAlignToScaleBounds } from "../zoom/zoom.logic";
 import { handleCalculateZoomPositions } from "../zoom/zoom.utils";
@@ -39,7 +40,7 @@ export function handleWheelZoom(
 
   const { contentComponent, setup, transformState } = contextInstance;
   const { scale } = transformState;
-  const { limitToBounds, centerZoomedOut, zoomAnimation, wheel } = setup;
+  const { limitToBounds, boundsMode, zoomAnimation, wheel } = setup;
   const { size, disabled } = zoomAnimation;
   const { step } = wheel;
 
@@ -67,7 +68,8 @@ export function handleWheelZoom(
 
   const mousePosition = getMousePosition(event, contentComponent, scale);
 
-  const isPaddingDisabled = disabled || size === 0 || centerZoomedOut;
+  const isPaddingDisabled
+    = disabled || size === 0 || boundsMode == BoundsMode.CENTER_ZOOMED_OUT;
   const isLimitedToBounds = limitToBounds && isPaddingDisabled;
 
   const { x, y } = handleCalculateZoomPositions(

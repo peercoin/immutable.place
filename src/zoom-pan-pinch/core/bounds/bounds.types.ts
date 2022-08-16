@@ -2,7 +2,12 @@ export interface ComponentsSizesType {
   wrapperWidth: number;
   wrapperHeight: number;
   newContentWidth: number;
-  newDiffWidth: number;
   newContentHeight: number;
-  newDiffHeight: number;
 }
+
+export enum BoundsMode { // eslint-disable-line
+  NORMAL,
+  CENTER_ZOOMED_OUT,
+  CENTER_BOUND_EDGES
+}
+

@@ -1,6 +1,7 @@
 import React from "react";
 import { TransformContext } from "../components/transform-context";
 import { animations } from "../core/animations/animations.constants";
+import {BoundsMode} from "../core/bounds/bounds.types";
 import {
   centerView,
   resetTransform,
@@ -50,7 +51,7 @@ export interface ReactZoomPanPinchProps {
   minScale?: number;
   maxScale?: number;
   limitToBounds?: boolean;
-  centerZoomedOut?: boolean;
+  boundsMode?: BoundsMode;
   centerOnInit?: boolean;
   wheel?: {
     step?: number;

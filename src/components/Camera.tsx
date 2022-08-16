@@ -6,6 +6,7 @@ import ShortClickable from "./ShortClickable";
 import TransformWrapper from "../zoom-pan-pinch/components/transform-wrapper";
 import TransformComponent from "../zoom-pan-pinch/components/transform-component";
 import {BoundsType, ReactZoomPanPinchRef} from "../zoom-pan-pinch/models";
+import {BoundsMode} from "../zoom-pan-pinch/core/bounds/bounds.types";
 
 const INITIAL_SCALE = 5;
 const CLICK_SCALE_THRESHOLD = 10;
@@ -135,6 +136,7 @@ export default function Camera(
       wheel={{ step: 0.06 }}
       doubleClick={{ disabled: true }}
       ref={transformRefCallback}
+      boundsMode={BoundsMode.CENTER_BOUND_EDGES}
     >
       {({ zoomIn, zoomOut }) => (
         <Fragment>

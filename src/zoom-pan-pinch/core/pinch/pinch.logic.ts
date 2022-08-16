@@ -1,5 +1,6 @@
 import { ReactZoomPanPinchContext } from "../../models";
 import { handleCancelAnimation } from "../animations/animations.utils";
+import {BoundsMode} from "../bounds/bounds.types";
 import { handleCalculateBounds } from "../bounds/bounds.utils";
 import { handleAlignToScaleBounds } from "../zoom/zoom.logic";
 import { handleCalculateZoomPositions } from "../zoom/zoom.utils";
@@ -29,7 +30,7 @@ export function handlePinchZoom(
 ): void {
   const { contentComponent, pinchStartDistance } = contextInstance;
   const { scale } = contextInstance.transformState;
-  const { limitToBounds, centerZoomedOut, zoomAnimation } =
+  const { limitToBounds, boundsMode, zoomAnimation } =
     contextInstance.setup;
   const { disabled, size } = zoomAnimation;
 
@@ -54,7 +55,8 @@ export function handlePinchZoom(
 
   const bounds = handleCalculateBounds(contextInstance, newScale);
 
-  const isPaddingDisabled = disabled || size === 0 || centerZoomedOut;
+  const isPaddingDisabled
+    = disabled || size === 0 || boundsMode == BoundsMode.CENTER_ZOOMED_OUT;
   const isLimitedToBounds = limitToBounds && isPaddingDisabled;
 
   const { x, y } = handleCalculateZoomPositions(

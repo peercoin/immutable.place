@@ -1,3 +1,4 @@
+import {BoundsMode} from "../core/bounds/bounds.types";
 import {
   LibrarySetup,
   ReactZoomPanPinchComponentHelpers,
@@ -24,7 +25,7 @@ export const contextInitialState:
 
 export const initialSetup: LibrarySetup = {
   centerOnInit: false,
-  centerZoomedOut: false,
+  boundsMode: BoundsMode.NORMAL,
   disabled: false,
   limitToBounds: true,
   maxPositionX: null,

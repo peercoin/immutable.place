@@ -4,6 +4,7 @@ import {
   ReactZoomPanPinchState
 } from "../../models";
 import { isExcludedNode } from "../../utils";
+import {BoundsMode} from "../bounds/bounds.types";
 import { getMouseBoundedPosition } from "../bounds/bounds.utils";
 import { handleCalculateZoomPositions } from "../zoom/zoom.utils";
 
@@ -71,7 +72,7 @@ export function handlePanToBounds(
   contextInstance: ReactZoomPanPinchContext
 ): Omit<ReactZoomPanPinchState, "previousScale"> | null {
   const { positionX, positionY, scale } = contextInstance.transformState;
-  const { disabled, limitToBounds, centerZoomedOut } = contextInstance.setup;
+  const { disabled, limitToBounds, boundsMode } = contextInstance.setup;
   const { wrapperComponent } = contextInstance;
 
   if (
@@ -106,7 +107,7 @@ export function handlePanToBounds(
     mousePosY,
     scale,
     contextInstance.bounds,
-    limitToBounds || centerZoomedOut
+    limitToBounds || boundsMode == BoundsMode.CENTER_ZOOMED_OUT
   );
 
   return {
