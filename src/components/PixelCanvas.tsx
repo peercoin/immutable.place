@@ -51,22 +51,25 @@ function PixelCanvas(
 
   function handleNewCursorPos(cursor: CursorPos | null) {
 
+    // Do not worry about hovered pixel, when there is an active pixel
+    if (activePixel !== null) return;
+
     const pixel = pixelOfCursorPosition(cursor);
 
     if (
       pixel?.x == hoveredPixel?.x
-    && pixel?.y == hoveredPixel?.y
+      && pixel?.y == hoveredPixel?.y
     ) return;
 
     setHoveredPixel(pixel);
-
-    // Only provide hover pixel when there isn't an active pixel
-    if (activePixel === null)
-      onPixelHover(pixel);
+    onPixelHover(pixel);
 
   }
 
   const cursorRef = useCursorRef(handleNewCursorPos);
+
+  // If there is no active pixel, ensure the cursor position has been handled
+  handleNewCursorPos(cursorRef.current);
 
   const pixelCanvasRefObj = {
 
