@@ -133,7 +133,7 @@ export default function Camera(
       maxScale={30}
       initialPositionX={-500}
       initialPositionY={-500}
-      wheel={{ step: 0.06 }}
+      wheel={{ step: 0.08 }}
       doubleClick={{ disabled: true }}
       ref={transformRefCallback}
       boundsMode={BoundsMode.CENTER_BOUND_EDGES}
