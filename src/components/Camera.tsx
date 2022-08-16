@@ -101,7 +101,7 @@ export default function Camera(
 
   useMovement((x, y) => {
 
-    const moveAmtPerSecond = 600;
+    const moveAmtPerSecond = 800;
     const moveX = x*moveAmtPerSecond;
     const moveY = y*moveAmtPerSecond;
 
