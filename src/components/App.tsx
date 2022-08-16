@@ -1,5 +1,5 @@
 import "./App.scss";
-import {Fragment, useState, MouseEvent, useRef} from "react";
+import {Fragment, useState, MouseEvent, useRef, useCallback} from "react";
 import Camera from "./Camera";
 import PixelModal from "./PixelModal";
 import PixelCanvas, {PixelCanvasRef} from "./PixelCanvas";
@@ -16,6 +16,33 @@ export default function App() {
   const [pixelCoord, setPixelCoord] = useState<PixelCoord | null>(null);
   const canvasRef = useRef<PixelCanvasRef>(null);
 
+  const handleCanvasClick = useCallback((e: MouseEvent) => {
+
+    if (canvasRef.current === null) return;
+
+    const clickCoord = canvasRef.current.getPixelOfMouseEvent(e);
+    if (clickCoord === null) return;
+
+    setModalPixel({
+      x: clickCoord.x,
+      y: clickCoord.y
+    });
+
+  }, []);
+
+  const handleMove = useCallback(() => {
+    canvasRef.current?.notifyMove();
+  }, []);
+
+  const handleModalClose = useCallback(() => {
+    setModalPixel(null);
+  }, []);
+
+  const confirmedPixel = useCallback((pixelColour: PixelColour) => {
+    handleModalClose();
+    dispatchCanvas(pixelColour);
+  }, [handleModalClose, dispatchCanvas]);
+
   const { imgData, error } = canvasData;
   const errorReason = error === null || error === ""
     ? ""
@@ -31,33 +58,6 @@ export default function App() {
         }
       </div>
     );
-
-  function handleCanvasClick(e: MouseEvent) {
-
-    if (canvasRef.current === null) return;
-
-    const clickCoord = canvasRef.current.getPixelOfMouseEvent(e);
-    if (clickCoord === null) return;
-
-    setModalPixel({
-      x: clickCoord.x,
-      y: clickCoord.y
-    });
-
-  }
-
-  function handleMove() {
-    canvasRef.current?.notifyMove();
-  }
-
-  function handleModalClose() {
-    setModalPixel(null);
-  }
-
-  function confirmedPixel(pixelColour: PixelColour) {
-    handleModalClose();
-    dispatchCanvas(pixelColour);
-  }
 
   function padCoord(n: number) {
     return n.toString().padStart(3, "0");

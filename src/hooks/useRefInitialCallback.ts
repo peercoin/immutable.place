@@ -11,6 +11,7 @@ export default function useRefInitialCallback<T>(
 
   const didSet = useRef(false);
   const ref = useRef<T | null>(null);
+
   const refCallback = useCallback((value: T | null) => {
 
     ref.current = value;
