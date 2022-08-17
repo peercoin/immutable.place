@@ -1,6 +1,7 @@
 import {Colour, PixelCoord} from "coin-canvas-lib";
 import {
-  ForwardedRef, forwardRef, useEffect, useImperativeHandle, useRef, MouseEvent, useState
+  ForwardedRef, forwardRef, useEffect, useImperativeHandle, useRef, MouseEvent,
+  useState, useCallback
 } from "react";
 import useCursorRef, {CursorPos} from "../hooks/useCursorRef";
 import "./PixelCanvas.scss";
@@ -31,27 +32,31 @@ function PixelCanvas(
 
   // Update hovered pixel when mouse moves and ensure cursor position is updated
 
-  function pixelOfCursorPosition(cursor: CursorPos | null): PixelCoord | null {
+  const pixelOfCursorPosition = useCallback(
+    (cursor: CursorPos | null): PixelCoord | null => {
 
-    const canvas = canvasRef.current;
-    if (canvas === null || cursor === null) return null;
+      const canvas = canvasRef.current;
+      if (canvas === null || cursor === null) return null;
 
-    const rect = canvas.getBoundingClientRect();
-    const x = (cursor.x - rect.left) / (rect.right - rect.left) * canvas.width;
-    const y = (cursor.y - rect.top) / (rect.bottom - rect.top) * canvas.height;
+      const rect = canvas.getBoundingClientRect();
+      const x = (cursor.x - rect.left) / (rect.right - rect.left) * canvas.width;
+      const y = (cursor.y - rect.top) / (rect.bottom - rect.top) * canvas.height;
 
-    if (x < 0 || y < 0 || x >= imgData.width || y >= imgData.height) return null;
+      if (x < 0 || y < 0 || x >= imgData.width || y >= imgData.height) return null;
 
-    return {
-      x: Math.floor(x),
-      y: Math.floor(y)
-    };
+      return {
+        x: Math.floor(x),
+        y: Math.floor(y)
+      };
 
-  }
+    },
+    [canvasRef, imgData.width, imgData.height]
+  );
 
-  function handleNewCursorPos(cursor: CursorPos | null) {
+  const handleNewCursorPos = useCallback((cursor: CursorPos | null) => {
 
-    // Do not worry about hovered pixel, when there is an active pixel
+    // Do not set hovered pixel, when a pixel is active (open in modal), as the
+    // active pixel will be shown instead.
     if (activePixel !== null) return;
 
     const pixel = pixelOfCursorPosition(cursor);
@@ -64,12 +69,17 @@ function PixelCanvas(
     setHoveredPixel(pixel);
     onPixelHover(pixel);
 
-  }
+  }, [activePixel, pixelOfCursorPosition, hoveredPixel, setHoveredPixel, onPixelHover]);
 
   const cursorRef = useCursorRef(handleNewCursorPos);
 
-  // If there is no active pixel, ensure the cursor position has been handled
-  handleNewCursorPos(cursorRef.current);
+  // When the canvas is re-rendered, there may not be an active pixel any more
+  // and the hovered pixel would therefore need to be set according to the
+  // cursor position.
+  useEffect(
+    () => handleNewCursorPos(cursorRef.current),
+    [handleNewCursorPos, activePixel, cursorRef]
+  );
 
   const pixelCanvasRefObj = {
 
