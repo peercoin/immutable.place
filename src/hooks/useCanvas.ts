@@ -5,32 +5,28 @@ import {Dispatch, useEffect, useReducer, useState} from "react";
 import CONFIG from "../config";
 
 class CanvasData {
-  bytes: Uint8ClampedArray | null;
+  imgData: ImageData | null;
   error: string | null;
 
   constructor(bytes: Uint8ClampedArray | null, error: string | null) {
-    this.bytes = bytes;
-    this.error = error;
-  }
-
-  get imgData() {
-    return this.bytes === null
+    this.imgData = bytes === null
       ? null
-      : new ImageData(this.bytes, CONFIG.xLen, CONFIG.yLen);
+      : new ImageData(bytes, CONFIG.xLen, CONFIG.yLen);
+    this.error = error;
   }
 
 }
 
 class CanvasError extends Error { }
 
-function addPixelColour(canvas: CanvasData, pixCol: PixelColour) {
+function addPixelColour(bytes: Uint8ClampedArray | null, pixCol: PixelColour) {
 
-  if (canvas.bytes === null) return;
+  if (bytes === null) return;
 
   const offset = (pixCol.coord.x + pixCol.coord.y*CONFIG.xLen)*4;
-  canvas.bytes[offset] = pixCol.colour.red;
-  canvas.bytes[offset + 1] = pixCol.colour.green;
-  canvas.bytes[offset + 2] = pixCol.colour.blue;
+  bytes[offset] = pixCol.colour.red;
+  bytes[offset + 1] = pixCol.colour.green;
+  bytes[offset + 2] = pixCol.colour.blue;
 
 }
 
@@ -40,18 +36,20 @@ function canvasReducer(
   action: PixelColour | CanvasError | Canvas | PixelColour[]
 ) {
 
+  let bytes = canvas.imgData?.data ?? null;
+
   if (action instanceof PixelColour) {
-    addPixelColour(canvas, action);
+    addPixelColour(bytes, action);
   } else if (action instanceof Array) {
-    action.forEach(pixColour => addPixelColour(canvas, pixColour));
+    action.forEach(pixColour => addPixelColour(bytes, pixColour));
   } else if (action instanceof CanvasError) {
     canvas.error = action.message;
   } else if (action instanceof Canvas) {
-    canvas.bytes = action.getImageData().data;
+    bytes = action.getImageData().data;
     canvas.error = null;
   }
 
-  return new CanvasData(canvas.bytes, canvas.error);
+  return new CanvasData(bytes, canvas.error);
 
 }
 

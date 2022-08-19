@@ -1,7 +1,7 @@
 import {Colour, PixelCoord} from "coin-canvas-lib";
 import {
   ForwardedRef, forwardRef, useEffect, useImperativeHandle, useRef, MouseEvent,
-  useState, useCallback
+  useState, useCallback, useMemo
 } from "react";
 import useCursorRef, {CursorPos} from "../hooks/useCursorRef";
 import "./PixelCanvas.scss";
@@ -97,17 +97,22 @@ function PixelCanvas(
 
   useImperativeHandle(ref, () => pixelCanvasRefObj);
 
+  const getCanvasCtx = useCallback(
+    () => canvasRef.current?.getContext("2d") ?? null,
+    [canvasRef]
+  );
+
+  // Place imgData to canvas whenever it changes
+  useEffect(
+    () => getCanvasCtx()?.putImageData(imgData, 0, 0),
+    [getCanvasCtx, imgData]
+  );
+
   useEffect(() => {
 
-    const canvas = canvasRef.current;
-    if (canvas === null) return;
+    const ctx = getCanvasCtx();
 
-    const ctx = canvas.getContext("2d");
-    if (ctx === null) return;
-
-    ctx.putImageData(imgData, 0, 0);
-
-    if (hoverColour === null || hoveredPixel === null) return;
+    if (ctx === null || hoverColour === null || hoveredPixel === null) return;
 
     // Show the pixel that is currently provided as "active" or else the pixel
     // that is being hovered over
@@ -121,20 +126,20 @@ function PixelCanvas(
     pixData[2] = hoverColour.blue;
     pixData[3] = 0xff;
 
+    // Refresh imgData to remove any other hover pixels before placing new one
+    ctx.putImageData(imgData, 0, 0);
     ctx.putImageData(
       new ImageData(pixData, 1, 1), pixelToColour.x, pixelToColour.y
     );
 
-  });
+  }, [getCanvasCtx, activePixel, hoveredPixel, hoverColour, imgData]);
 
-  return (
-    <canvas
-      className="pixel-canvas card"
-      ref={canvasRef}
-      width={imgData.width}
-      height={imgData.height}
-    />
-  );
+  return useMemo(() => <canvas
+    className="pixel-canvas card"
+    ref={canvasRef}
+    width={imgData.width}
+    height={imgData.height}
+  />, [imgData.height, imgData.width]);
 
 }
 /* eslint-enable */

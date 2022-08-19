@@ -61,7 +61,7 @@ export default function CanvasPreview(
 
     ctx.putImageData(new ImageData(previewData, PREVIEW_WIDTH, PREVIEW_WIDTH), 0, 0);
 
-  });
+  }, [imgData, pixel, showColour]);
 
   return <canvas
     ref={previewRef}
