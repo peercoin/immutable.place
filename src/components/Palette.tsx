@@ -1,4 +1,5 @@
 import {Colour} from "coin-canvas-lib";
+import useEscape from "../hooks/useEscape";
 import "./Palette.scss";
 
 export default function Palette(
@@ -10,6 +11,9 @@ export default function Palette(
     onSelection: (colour: Colour | null) => void
   }
 ) {
+
+  // Clear colour on escape
+  useEscape(() => onSelection(null));
 
   function onColourClick(c: Colour) {
     const didSelect = c.id == selectedColour?.id;

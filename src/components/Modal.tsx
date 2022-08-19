@@ -1,5 +1,6 @@
 import "./Modal.scss";
 import {ReactNode} from "react";
+import useEscape from "../hooks/useEscape";
 
 export default function Modal(
   {
@@ -16,6 +17,9 @@ export default function Modal(
     onClose?: () => void
   }
 ) {
+
+  // Close the modal when the escape key is pressed
+  useEscape(onClose);
 
   if (!open) return null;
 

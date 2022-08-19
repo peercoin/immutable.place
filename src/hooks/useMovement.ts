@@ -19,7 +19,6 @@ const MOVE_DOWN_LEFT = 0b1001;
 /**
  * Provides arrow key movement in the x and y direction to the onMove callback.
  * The movment amounts are equal to the number of seconds between frames.
- *
  */
 export default function useMovement(onMove: (x: number, y:number) => void) {
 

@@ -105,7 +105,9 @@ function PixelCanvas(
   // Place imgData to canvas whenever it changes
   useEffect(
     () => getCanvasCtx()?.putImageData(imgData, 0, 0),
-    [getCanvasCtx, imgData]
+    // Ensure if hoverColour is changed that any previous hovered colour is
+    // removed
+    [getCanvasCtx, imgData, hoverColour]
   );
 
   useEffect(() => {
