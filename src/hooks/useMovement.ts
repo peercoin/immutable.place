@@ -120,7 +120,7 @@ export default function useMovement(onMove: (x: number, y:number) => void) {
       removeEventListener("keyup", onKeyUp);
     };
 
-  });
+  }, [onMove]);
 
 }
 /* eslint-enable */

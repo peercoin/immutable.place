@@ -71,46 +71,46 @@ export default function Camera(
 
   // Code relating to arrow key movement
 
-  function withinBounds(
-    newVal: number, minVal: number | undefined, maxVal: number | undefined
-  ) {
-    if (minVal === undefined || maxVal === undefined) return newVal;
-    return Math.max(minVal, Math.min(maxVal, newVal));
-  }
+  const withinBounds = useCallback(
+    (newVal: number, minVal: number | undefined, maxVal: number | undefined) => {
+      if (minVal === undefined || maxVal === undefined) return newVal;
+      return Math.max(minVal, Math.min(maxVal, newVal));
+    }, []
+  );
 
-  function xyWithinBounds(x: number, y: number, bounds: BoundsType | null) : number[] {
-    return [
+  const xyWithinBounds = useCallback(
+    (x: number, y: number, bounds: BoundsType | null) : number[] => [
       withinBounds(x, bounds?.minPositionX, bounds?.maxPositionX),
       withinBounds(y, bounds?.minPositionY, bounds?.maxPositionY)
-    ];
-  }
+    ],
+    [withinBounds]
+  );
 
-  function makeMovement(x: number, y: number) {
+  const makeMovement = useCallback((x: number, y: number) => {
 
     const transformer = transformRef.current;
     if (transformer === null) return;
+
+    const moveAmtPerSecond = 800;
+    const dX = x*moveAmtPerSecond;
+    const dY = y*moveAmtPerSecond;
 
     // Use subtraction as the positions are in the negative for some reason
     // Also ensure new positions are within bounds
     const { positionX, positionY, scale } = transformer.state;
     const { bounds } = transformer.instance;
 
-    const [newX, newY] = xyWithinBounds(positionX - x, positionY - y, bounds);
+    const [newX, newY] = xyWithinBounds(positionX - dX, positionY - dY, bounds);
     transformer.setTransform(newX, newY, scale, 0);
 
-  }
+  }, [transformRef, xyWithinBounds]);
 
-  useMovement((x, y) => {
+  // Provides arrow key handling to the makeMovement callback
+  useMovement(makeMovement);
 
-    const moveAmtPerSecond = 800;
-    const moveX = x*moveAmtPerSecond;
-    const moveY = y*moveAmtPerSecond;
+  // Handle clicks on the navigable area
 
-    makeMovement(moveX, moveY);
-
-  });
-
-  function handleClick(e: MouseEvent) {
+  const handleClick = useCallback((e: MouseEvent) => {
     // Zoom into clickable scale, or call callback otherwise
 
     const transformer = transformRef.current;
@@ -124,7 +124,7 @@ export default function Camera(
       onClick(e);
     }
 
-  }
+  }, [onClick, transformRef]);
 
   return (
     <TransformWrapper
