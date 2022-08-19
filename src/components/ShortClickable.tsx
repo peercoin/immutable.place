@@ -1,4 +1,4 @@
-import {MouseEvent, ReactNode, useRef} from "react";
+import {MouseEvent, ReactNode, useCallback, useRef} from "react";
 
 /* eslint-disable max-lines-per-function */
 /**
@@ -27,16 +27,16 @@ export default function ShortClickable(
     downEvent: null as MouseEvent | null
   });
 
-  function handleDown(e: MouseEvent) {
+  const handleDown = useCallback((e: MouseEvent) => {
     clickInfoRef.current = {
       x: e.screenX,
       y: e.screenY,
       ts: Date.now(),
       downEvent: e
     };
-  }
+  }, []);
 
-  function handleUp(e: MouseEvent) {
+  const handleUp = useCallback((e: MouseEvent) => {
 
     const { x, y, ts, downEvent } = clickInfoRef.current;
     if (downEvent === null) return;
@@ -50,7 +50,7 @@ export default function ShortClickable(
 
     onShortClick(downEvent);
 
-  }
+  }, [maxDurationMs, maxMovement, onShortClick]);
 
   return (
     <div onMouseDown={handleDown} onMouseUp={handleUp}>

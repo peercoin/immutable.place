@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 export interface CursorPos {
   x: number,
@@ -14,7 +14,7 @@ export default function useCursorRef(onMove: (cursor: CursorPos | null) => void)
 
   const cursorRef = useRef<CursorPos | null>(null);
 
-  function onMouseMove(e: MouseEvent) {
+  const onMouseMove = useCallback((e: MouseEvent) => {
 
     cursorRef.current = {
       x: e.clientX,
@@ -23,12 +23,12 @@ export default function useCursorRef(onMove: (cursor: CursorPos | null) => void)
 
     onMove(cursorRef.current);
 
-  }
+  }, [onMove]);
 
-  function onMouseLeave() {
+  const onMouseLeave = useCallback(() => {
     cursorRef.current = null;
     onMove(null);
-  }
+  }, [onMove]);
 
   useEffect(() => {
 
@@ -40,7 +40,7 @@ export default function useCursorRef(onMove: (cursor: CursorPos | null) => void)
       removeEventListener("mouseleave", onMouseLeave);
     };
 
-  });
+  }, [onMouseMove, onMouseLeave]);
 
   return cursorRef;
 

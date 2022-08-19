@@ -69,7 +69,7 @@ function PixelCanvas(
     setHoveredPixel(pixel);
     onPixelHover(pixel);
 
-  }, [activePixel, pixelOfCursorPosition, hoveredPixel, setHoveredPixel, onPixelHover]);
+  }, [activePixel, pixelOfCursorPosition, hoveredPixel, onPixelHover]);
 
   const cursorRef = useCursorRef(handleNewCursorPos);
 
