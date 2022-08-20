@@ -17,12 +17,14 @@ function PixelCanvas(
     imgData,
     hoverColour,
     onPixelHover,
-    activePixel
+    activePixel,
+    scale
   }: {
     imgData: ImageData
     hoverColour: Colour | null
     onPixelHover: (pixel: PixelCoord | null) => void,
-    activePixel: PixelCoord | null
+    activePixel: PixelCoord | null,
+    scale: number
   },
   ref: ForwardedRef<PixelCanvasRef>
 ) {
@@ -98,8 +100,8 @@ function PixelCanvas(
   useImperativeHandle(ref, () => pixelCanvasRefObj);
 
   const getCanvasCtx = useCallback(
-    () => canvasRef.current?.getContext("2d") ?? null,
-    [canvasRef]
+    () => canvasRef.current?.getContext("2d", { alpha: false }) ?? null,
+    []
   );
 
   // Place imgData to canvas whenever it changes
@@ -108,6 +110,20 @@ function PixelCanvas(
     // Ensure if hoverColour is changed that any previous hovered colour is
     // removed
     [getCanvasCtx, imgData, hoverColour]
+  );
+
+  // Scale canvas
+  useEffect(
+    () => {
+
+      const canvas = canvasRef.current;
+      if (canvas === null) return;
+
+      canvas.style.width = `${imgData.width*scale}px`;
+      canvas.style.height = `${imgData.height*scale}px`;
+
+    },
+    [imgData.height, imgData.width, scale]
   );
 
   useEffect(() => {
@@ -137,7 +153,7 @@ function PixelCanvas(
   }, [getCanvasCtx, activePixel, hoveredPixel, hoverColour, imgData]);
 
   return useMemo(() => <canvas
-    className="pixel-canvas card"
+    className="pixel-canvas"
     ref={canvasRef}
     width={imgData.width}
     height={imgData.height}

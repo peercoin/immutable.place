@@ -14,16 +14,18 @@ const CLICK_ZOOM_SCALE = 15;
 
 /* eslint-disable max-lines-per-function */
 /**
- * Provides navigation of {children}
+ * Provides navigation of {children} with additional scaling with
+ * {scaleAdjustment}.
  * @param onClick Called when zoomed in and clicked on
  */
 export default function Camera(
   {
-    children, onClick, onMoved
+    children, onClick, onMoved, scaleAdjustment
   }: {
     children: ReactNode,
     onClick: (event: MouseEvent) => void,
-    onMoved: () => void
+    onMoved: () => void,
+    scaleAdjustment: number
   }
 ) {
 
@@ -53,9 +55,9 @@ export default function Camera(
   const handleChange = useCallback((transformer: ReactZoomPanPinchRef) => {
     // When the transformer changes, update if the canvas is clickable and
     // notify parent of potential movement
-    setClickable(transformer.state.scale >= CLICK_SCALE_THRESHOLD);
+    setClickable(transformer.state.scale >= CLICK_SCALE_THRESHOLD*scaleAdjustment);
     onMoved();
-  }, [onMoved]);
+  }, [onMoved, scaleAdjustment]);
 
   // Handle setting an initial position and clickable state when the underlying
   // ref changes
@@ -118,19 +120,21 @@ export default function Camera(
 
     const { scale } = transformer.state;
 
-    if (scale < CLICK_SCALE_THRESHOLD) {
-      transformer.zoomToMouseEvent(e, CLICK_ZOOM_SCALE, 500, "easeInOutQuad");
+    if (scale < CLICK_SCALE_THRESHOLD*scaleAdjustment) {
+      transformer.zoomToMouseEvent(
+        e, CLICK_ZOOM_SCALE*scaleAdjustment, 500, "easeInOutQuad"
+      );
     } else {
       onClick(e);
     }
 
-  }, [onClick, transformRef]);
+  }, [onClick, transformRef, scaleAdjustment]);
 
   return (
     <TransformWrapper
-      initialScale={INITIAL_SCALE}
-      minScale={1}
-      maxScale={30}
+      initialScale={INITIAL_SCALE*scaleAdjustment}
+      minScale={scaleAdjustment}
+      maxScale={30*scaleAdjustment}
       initialPositionX={-500}
       initialPositionY={-500}
       wheel={{ step: 0.08 }}

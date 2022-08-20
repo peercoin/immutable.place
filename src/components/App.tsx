@@ -65,13 +65,18 @@ export default function App() {
 
   return (
     <Fragment>
-      <Camera onClick={handleCanvasClick} onMoved={handleMove}>
+      <Camera
+        onClick={handleCanvasClick}
+        onMoved={handleMove}
+        scaleAdjustment={1/30}
+      >
         <PixelCanvas
           imgData={imgData}
           ref={canvasRef}
           hoverColour={colourDrop}
           onPixelHover={setPixelCoord}
           activePixel={modalPixel}
+          scale={30}
         />
       </Camera>
       {

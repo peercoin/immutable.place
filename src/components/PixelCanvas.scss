@@ -2,4 +2,6 @@
 
 .pixel-canvas {
     @include mixins.pixelated-canvas;
+    // Adjust box-shadow for scaling
+    box-shadow: 0px 0px 450px 150px rgb(0 0 0 / 47%);
 }
