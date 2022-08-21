@@ -33,10 +33,6 @@ export default function PixelModal(
   const [selectedColour, setSelectedColour] = useState<Colour | null>(null);
   const [hoverColour, setHoverColour] = useState<Colour | null>(null);
 
-  function getSelectedColour() {
-    return dropColour ?? selectedColour;
-  }
-
   // Load pixel data and update when image data changes
   const {
     pixelData, requestError, clearPixelData
@@ -45,13 +41,11 @@ export default function PixelModal(
   // Render if there is a pixel
   if (pixel === null) return null;
 
-  // Infer active colour from RGB value
-  const activeOffset = (pixel.x + pixel.y*imgData.width)*4;
-  const activeColour = Colour.palette.find(
-    c => c.red == imgData.data[activeOffset]
-    && c.green == imgData.data[activeOffset+1]
-    && c.blue == imgData.data[activeOffset+2]
-  );
+  const activeColour = pixelData?.active;
+
+  function getSelectedColour() {
+    return dropColour ?? selectedColour;
+  }
 
   function cleanup() {
     // Ensure the next time the modal is opened, there is no slected colour
@@ -67,7 +61,7 @@ export default function PixelModal(
 
   function getPixelColourData(c: Colour | undefined) {
     if (c === undefined) return null;
-    const colourData = pixelData?.find(pcd => pcd.colour.id == c.id);
+    const colourData = pixelData?.colours.find(pcd => pcd.colour.id == c.id);
     if (colourData === undefined) return null;
     return colourData;
   }
@@ -93,7 +87,8 @@ export default function PixelModal(
 
     if (newColour === null) {
       return <PixelColourSelection
-        colours={pixelData}
+        activeColour={activeColour}
+        pixelData={pixelData}
         onHoverColour={setHoverColour}
         onSelectColour={setSelectedColour}
       />;

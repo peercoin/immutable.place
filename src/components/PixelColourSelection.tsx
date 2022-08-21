@@ -5,11 +5,13 @@ import {Fragment} from "react";
 /* eslint-disable max-lines-per-function */
 export default function PixelColourSelection(
   {
-    colours,
+    activeColour,
+    pixelData,
     onHoverColour,
     onSelectColour
   }: {
-    colours: PixelData,
+    activeColour: Colour | undefined,
+    pixelData: PixelData,
     onHoverColour: (c: Colour | null) => void,
     onSelectColour: (c: Colour) => void
   }
@@ -21,8 +23,9 @@ export default function PixelColourSelection(
     return 0;
   }
 
-  const colourRows = colours.sort(
-    (a, b) => -biCmp(a.balance, b.balance)
+  // Sort colours by balance and ensure active colour is on top
+  const colourRows = pixelData.colours.sort(
+    (a, b) => (a.colour.id === activeColour?.id ? -1 : -biCmp(a.balance, b.balance))
   ).map(data => (
     <div
       className="pixel-colour-row"
