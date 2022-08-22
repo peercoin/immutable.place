@@ -13,6 +13,10 @@
   bottom: 0;
   margin: 15px;
 
+  @media only screen and (max-width: 700px) {
+    display: none;
+  }
+
   button {
     &:hover {
       cursor: pointer;

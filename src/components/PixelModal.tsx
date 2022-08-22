@@ -114,7 +114,7 @@ export default function PixelModal(
 
   return (
     <Modal
-      title={`Pixel (${pixel.x}, ${pixel.y})`}
+      title={`Pixel (${pixel.x},\u00A0${pixel.y})`}
       topLeftElement={
         <CanvasPreview
           pixel={pixel}
