@@ -173,7 +173,7 @@ export default function Camera(
             <button onClick={() => saveCanvasAsImage()}>
               <img src="save.svg" />
             </button>
-            <button onClick={() => zoomOut(0.9, 200)}>?</button>
+            <button>?</button>
           </div>
         </Fragment>
       )}
