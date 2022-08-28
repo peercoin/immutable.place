@@ -12,6 +12,15 @@ const INITIAL_SCALE = 5;
 const CLICK_SCALE_THRESHOLD = 10;
 const CLICK_ZOOM_SCALE = 15;
 
+function saveCanvasAsImage() {
+  const [canvas] = document.getElementsByClassName("pixel-canvas");
+  const image = canvas ? (canvas as HTMLCanvasElement).toDataURL("image/png").replace("image/png", "image/octet-stream") : null;
+
+  if (image) {
+    window.location.href = image;
+  }
+}
+
 /* eslint-disable max-lines-per-function */
 /**
  * Provides navigation of {children} with additional scaling with
@@ -152,8 +161,19 @@ export default function Camera(
             </ShortClickable>
           </TransformComponent>
           <div className="zoom-buttons">
-            <button onClick={() => zoomIn(0.9, 200)}>+</button>
-            <button onClick={() => zoomOut(0.9, 200)}>−</button>
+            <button onClick={() => zoomIn(0.9, 200)}>
+              <img src="zoom-in.svg" />
+            </button>
+            <button onClick={() => zoomOut(0.9, 200)}>
+              <img src="zoom-out.svg" />
+            </button>
+          </div>
+
+          <div className="options-buttons">
+            <button onClick={() => saveCanvasAsImage()}>
+              <img src="save.svg" />
+            </button>
+            <button onClick={() => zoomOut(0.9, 200)}>?</button>
           </div>
         </Fragment>
       )}

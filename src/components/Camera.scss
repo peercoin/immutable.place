@@ -20,12 +20,41 @@
   button {
     &:hover {
       cursor: pointer;
+      background: rgb(17, 24, 39);
     }
     margin: 10px;
     font-size: 40px;
     min-width: 50px;
     min-height: 50px;
+    border-radius: 50%;
+    background-color: rgba(17, 24, 39, 0.6);
+    border: none;
   }
-
 }
 
+.options-buttons {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 15px;
+  display: grid;
+  grid-template-columns: repeat(1, auto);
+
+  @media only screen and (max-width: 700px) {
+    display: none;
+  }
+
+  button {
+    &:hover {
+      cursor: pointer;
+      background: rgb(17, 24, 39);
+    }
+    margin: 10px;
+    font-size: 1.5em;
+    min-width: 50px;
+    min-height: 50px;
+    border-radius: 50%;
+    background-color: rgba(17, 24, 39, 0.6);
+    border: none;
+  }
+}
