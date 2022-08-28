@@ -30,6 +30,7 @@ function PixelCanvas(
 ) {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [repaintId, setRepaintId] = useState<number>(0);
   const [hoveredPixel, setHoveredPixel] = useState<PixelCoord | null>(null);
 
   // Update hovered pixel when mouse moves and ensure cursor position is updated
@@ -68,10 +69,18 @@ function PixelCanvas(
       && pixel?.y == hoveredPixel?.y
     ) return;
 
+    // Repaint when the hovered position changes, unless the colour is null
+    // It might be better to set the specific pixel to repaint for efficiency.
+    if (hoverColour !== null)
+      setRepaintId(repaintId + 1);
+
     setHoveredPixel(pixel);
     onPixelHover(pixel);
 
-  }, [activePixel, pixelOfCursorPosition, hoveredPixel, onPixelHover]);
+  }, [
+    activePixel, pixelOfCursorPosition, hoverColour, hoveredPixel, onPixelHover,
+    repaintId
+  ]);
 
   const cursorRef = useCursorRef(handleNewCursorPos);
 
@@ -104,12 +113,14 @@ function PixelCanvas(
     []
   );
 
-  // Place imgData to canvas whenever it changes
+  // Repaint imgData whenever it changes or the canvas needs refreshing with a
+  // new repaintId
+  // It should be more efficient to replace repaintId with another state
+  // variable, perhaps `resetPixel` to reset a particular pixel that was the old
+  // hovered pixel.
   useEffect(
     () => getCanvasCtx()?.putImageData(imgData, 0, 0),
-    // Ensure if hoverColour is changed that any previous hovered colour is
-    // removed
-    [getCanvasCtx, imgData, hoverColour]
+    [getCanvasCtx, imgData, hoverColour, repaintId]
   );
 
   // Scale canvas
@@ -144,8 +155,6 @@ function PixelCanvas(
     pixData[2] = hoverColour.blue;
     pixData[3] = 0xff;
 
-    // Refresh imgData to remove any other hover pixels before placing new one
-    ctx.putImageData(imgData, 0, 0);
     ctx.putImageData(
       new ImageData(pixData, 1, 1), pixelToColour.x, pixelToColour.y
     );
