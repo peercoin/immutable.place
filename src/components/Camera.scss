@@ -9,36 +9,28 @@
 }
 
 .zoom-buttons {
-  position: absolute;
   bottom: 0;
-  margin: 15px;
-
-  @media only screen and (max-width: 700px) {
-    display: none;
-  }
-
-  button {
-    &:hover {
-      cursor: pointer;
-      background: rgb(17, 24, 39);
-    }
-    margin: 10px;
-    font-size: 40px;
-    min-width: 50px;
-    min-height: 50px;
-    border-radius: 50%;
-    background-color: rgba(17, 24, 39, 0.6);
-    border: none;
+  img {
+    // A trial and error adjustment to make the zoom images set nicely in button
+    // This doesn't appear consistently across browsers but should be good enough
+    // for now
+    padding-top: 0.3em;
   }
 }
 
 .options-buttons {
-  position: absolute;
   top: 0;
   right: 0;
-  margin: 15px;
   display: grid;
   grid-template-columns: repeat(1, auto);
+  img {
+    padding-top: 0.2em;
+  }
+}
+
+.options-buttons, .zoom-buttons {
+  position: absolute;
+  margin: 15px;
 
   @media only screen and (max-width: 700px) {
     display: none;
@@ -56,5 +48,7 @@
     border-radius: 50%;
     background-color: rgba(17, 24, 39, 0.6);
     border: none;
+
   }
+
 }
