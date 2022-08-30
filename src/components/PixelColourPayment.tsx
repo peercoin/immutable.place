@@ -9,13 +9,14 @@ const MIN_AMOUNT = BigInt(10000);
 /* eslint-disable max-lines-per-function */
 export default function PixelColourPayment(
   {
-    pixel, colourData, activeColourData, onCancel, onConfirm
+    pixel, colourData, activeColourData, onCancel, onConfirm, onTerms
   }: {
     pixel: PixelCoord,
     colourData: PixelColourData,
     activeColourData: PixelColourData,
     onCancel: () => void,
-    onConfirm: () => void
+    onConfirm: () => void,
+    onTerms: () => void
   }
 ) {
 
@@ -84,7 +85,9 @@ export default function PixelColourPayment(
           : null
       }
       <p>
-        <small>Payments are subject to the Terms of Use.</small>
+        <small>
+          Payments are subject to the <a onClick={onTerms}>Terms of Use.</a>
+        </small>
       </p>
       {
         isNewColour

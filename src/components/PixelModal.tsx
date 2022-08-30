@@ -17,7 +17,8 @@ export default function PixelModal(
     client,
     dropColour = null,
     onCancel = () => undefined,
-    onConfirm = () => undefined
+    onConfirm = () => undefined,
+    onTerms = () => undefined
   }: {
     pixel?: PixelCoord | null,
     imgData: ImageData,
@@ -25,6 +26,7 @@ export default function PixelModal(
     dropColour?: Colour | null,
     onCancel?: () => void,
     onConfirm?: (pixelColour: PixelColour) => void,
+    onTerms?: () => void
   }
 ) {
 
@@ -108,6 +110,7 @@ export default function PixelModal(
         cleanup();
         onConfirm(new PixelColour(pixel, newColour.id));
       }}
+      onTerms={onTerms}
     />;
 
   }

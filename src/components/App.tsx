@@ -6,10 +6,12 @@ import PixelCanvas, {PixelCanvasRef} from "./PixelCanvas";
 import {Colour, PixelColour, PixelCoord} from "coin-canvas-lib";
 import Palette from "./Palette";
 import useCanvas from "../hooks/useCanvas";
+import TermsModal from "./TermsModal";
 
 /* eslint-disable max-lines-per-function */
 export default function App() {
 
+  const [termsOpen, setTermsOpen] = useState<boolean>(false);
   const [canvasData, dispatchCanvas, client] = useCanvas();
   const [modalPixel, setModalPixel] = useState<PixelCoord | null>(null);
   const [colourDrop, setColourDrop] = useState<Colour | null>(null);
@@ -115,6 +117,11 @@ export default function App() {
             ? null
             : colourDrop
         }
+        onTerms={() => setTermsOpen(true)}
+      />
+      <TermsModal
+        open={termsOpen}
+        onClose={() => setTermsOpen(false)}
       />
     </Fragment>
   );
