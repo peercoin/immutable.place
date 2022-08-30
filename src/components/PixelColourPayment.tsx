@@ -83,8 +83,8 @@ export default function PixelColourPayment(
             onClick={copyAddr} className="addr-copy"
           >
             { copiedAddr === colourData.address ? "Copied!" : "Copy ⧉" }
-          </b>
-          <div>{colourData.address}</div>
+          </b><br/>
+          {colourData.address}
         </p>
       </div>
       {
