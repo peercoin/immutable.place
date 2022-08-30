@@ -7,11 +7,25 @@ import {Colour, PixelColour, PixelCoord} from "coin-canvas-lib";
 import Palette from "./Palette";
 import useCanvas from "../hooks/useCanvas";
 import TermsModal from "./TermsModal";
+import InfoModal from "./InfoModal";
+
+// This needs to be changed to not show hovered pixels. Instead the ImageData
+// should be used
+function saveCanvasAsImage() {
+  const [canvas] = document.getElementsByClassName("pixel-canvas");
+  const image = canvas ? (canvas as HTMLCanvasElement).toDataURL("image/png").replace("image/png", "image/octet-stream") : null;
+
+  if (image) {
+    window.location.href = image;
+  }
+}
 
 /* eslint-disable max-lines-per-function */
 export default function App() {
 
   const [termsOpen, setTermsOpen] = useState<boolean>(false);
+  const [infoOpen, setInfoOpen] = useState<boolean>(false);
+
   const [canvasData, dispatchCanvas, client] = useCanvas();
   const [modalPixel, setModalPixel] = useState<PixelCoord | null>(null);
   const [colourDrop, setColourDrop] = useState<Colour | null>(null);
@@ -106,6 +120,12 @@ export default function App() {
         selectedColour={colourDrop}
         onSelection={setColourDrop}
       />
+      <div className="options-buttons">
+        <button onClick={() => saveCanvasAsImage()}>
+          <img src="save.svg" />
+        </button>
+        <button onClick={() => setInfoOpen(true)}>?</button>
+      </div>
       <PixelModal
         pixel={modalPixel}
         imgData={imgData}
@@ -117,6 +137,11 @@ export default function App() {
             ? null
             : colourDrop
         }
+        onTerms={() => setTermsOpen(true)}
+      />
+      <InfoModal
+        open={infoOpen}
+        onClose={() => setInfoOpen(false)}
         onTerms={() => setTermsOpen(true)}
       />
       <TermsModal

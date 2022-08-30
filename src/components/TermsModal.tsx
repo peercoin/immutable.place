@@ -3,8 +3,7 @@ import Modal from "./Modal";
 /* eslint-disable max-lines-per-function */
 export default function TermsModal(
   {
-    open,
-    onClose = () => undefined
+    open, onClose
   }: {
     open: boolean,
     onClose?: () => void,
@@ -27,15 +26,14 @@ export default function TermsModal(
       <p>
         Content may be censored at the discretion of the website operators.
         Content is not allowed and may be censored where the content:
-
-        <ul>
-          <li>Breaches applicable laws.</li>
-          <li>Infringes upon intellectual property.</li>
-          <li>Constitutes harassment.</li>
-          <li>Discloses identifying or personal details of any person.</li>
-          <li>Incites violence.</li>
-        </ul>
       </p>
+      <ul>
+        <li>Breaches applicable laws.</li>
+        <li>Infringes upon intellectual property.</li>
+        <li>Constitutes harassment.</li>
+        <li>Discloses identifying or personal details of any person.</li>
+        <li>Incites violence.</li>
+      </ul>
       <h3>2. Not a Contract</h3>
       <p>
         Payments made through this website do not constitute a contract with any

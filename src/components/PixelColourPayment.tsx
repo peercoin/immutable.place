@@ -86,7 +86,7 @@ export default function PixelColourPayment(
       }
       <p>
         <small>
-          Payments are subject to the <a onClick={onTerms}>Terms of Use.</a>
+          Payments are subject to the <a onClick={onTerms}>Terms of Use</a>.
         </small>
       </p>
       {

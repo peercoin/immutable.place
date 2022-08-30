@@ -52,3 +52,38 @@
   pointer-events: none;
   font-family: monospace;
 }
+
+.options-buttons {
+  top: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: repeat(1, auto);
+  img {
+    padding-top: 0.2em;
+  }
+}
+
+.options-buttons, .zoom-buttons {
+  position: absolute;
+  margin: 15px;
+
+  @media only screen and (max-width: 700px) {
+    display: none;
+  }
+
+  button {
+    &:hover {
+      cursor: pointer;
+      background: rgb(17, 24, 39);
+    }
+    margin: 10px;
+    font-size: 1.5em;
+    min-width: 50px;
+    min-height: 50px;
+    border-radius: 50%;
+    background-color: rgba(17, 24, 39, 0.6);
+    border: none;
+  }
+
+}
+
