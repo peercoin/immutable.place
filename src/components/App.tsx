@@ -6,15 +6,22 @@ import PixelCanvas, {PixelCanvasRef} from "./PixelCanvas";
 import {Colour, PixelColour, PixelCoord} from "coin-canvas-lib";
 import Palette from "./Palette";
 import useCanvas from "../hooks/useCanvas";
+import TermsModal from "./TermsModal";
+import InfoModal from "./InfoModal";
 
 /* eslint-disable max-lines-per-function */
 export default function App() {
+
+  const [termsOpen, setTermsOpen] = useState<boolean>(false);
+  const [infoOpen, setInfoOpen] = useState<boolean>(false);
 
   const [canvasData, dispatchCanvas, client] = useCanvas();
   const [modalPixel, setModalPixel] = useState<PixelCoord | null>(null);
   const [colourDrop, setColourDrop] = useState<Colour | null>(null);
   const [pixelCoord, setPixelCoord] = useState<PixelCoord | null>(null);
   const canvasRef = useRef<PixelCanvasRef>(null);
+
+  const { imgData, error } = canvasData;
 
   const handleCanvasClick = useCallback((e: MouseEvent) => {
 
@@ -43,7 +50,28 @@ export default function App() {
     dispatchCanvas(pixelColour);
   }, [handleModalClose, dispatchCanvas]);
 
-  const { imgData, error } = canvasData;
+  const saveCanvasAsImage = useCallback(() => {
+
+    if (imgData === null) return;
+
+    const tempCanvas = document.createElement("canvas") as HTMLCanvasElement;
+    tempCanvas.width = imgData.width;
+    tempCanvas.height = imgData.height;
+
+    const ctx = tempCanvas.getContext("2d", { alpha: false });
+    if (ctx === null) return;
+
+    ctx.putImageData(imgData, 0, 0);
+
+    const image = tempCanvas.toDataURL("image/png");
+
+    const link = document.createElement("a");
+    link.href = image;
+    link.download = "canvas.png";
+    link.click();
+
+  }, [imgData]);
+
   const errorReason = error === null || error === ""
     ? ""
     : `: ${error}`;
@@ -104,6 +132,12 @@ export default function App() {
         selectedColour={colourDrop}
         onSelection={setColourDrop}
       />
+      <div className="options-buttons">
+        <button onClick={() => saveCanvasAsImage()}>
+          <img src="save.svg" />
+        </button>
+        <button onClick={() => setInfoOpen(true)}>?</button>
+      </div>
       <PixelModal
         pixel={modalPixel}
         imgData={imgData}
@@ -115,6 +149,16 @@ export default function App() {
             ? null
             : colourDrop
         }
+        onTerms={() => setTermsOpen(true)}
+      />
+      <InfoModal
+        open={infoOpen}
+        onClose={() => setInfoOpen(false)}
+        onTerms={() => setTermsOpen(true)}
+      />
+      <TermsModal
+        open={termsOpen}
+        onClose={() => setTermsOpen(false)}
       />
     </Fragment>
   );

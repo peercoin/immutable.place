@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Heebo&display=swap');
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Heebo', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -12,12 +12,15 @@ body {
 }
 
 button {
-  border: solid 1px;
-  border-radius: 3px;
-  padding: 4px 10px;
+  color: white;
   &:hover {
     background: #ccd;
     cursor: pointer;
   }
+}
+
+a {
+  cursor: pointer;
+  text-decoration: underline;
 }
 

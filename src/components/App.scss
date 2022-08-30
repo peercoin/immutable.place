@@ -16,30 +16,70 @@
 
 .canvas-error {
   position: absolute;
-  margin: 10px;
-  padding: 10px 20px;
-  border-radius: 3px;
+  margin: 90px 0 0 25px;
+  padding: 10px 20px 22px 20px;
+  border-radius: 12px;
   box-shadow: 0px 0px 7px 1px #000a;
 
-  background: #d00;
+  background: #111827;
   color: white;
-  text-align: center;
+}
+
+.canvas-error::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 12px;
+  background: #A10035;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
 }
 
 .coordinates-container {
-  @include mixins.flex-positioner;
   justify-content: right;
-  align-items: flex-start;
 }
 
 .coordinates {
   position: absolute;
-  margin: 10px;
-  padding: 10px;
-  border-radius: 3px;
-  background: #000b;
+  top: 0;
+  margin: 25px;
+  padding: 15px 16px;
+  border-radius: 200px;
+  background: rgba(17, 24, 39, 0.6);
   color: white;
   pointer-events: none;
   font-family: monospace;
+}
+
+.options-buttons {
+  top: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: repeat(1, auto);
+  img {
+    padding-top: 0.2em;
+  }
+}
+
+.options-buttons, .zoom-buttons {
+  position: absolute;
+  margin: 15px;
+
+  button {
+    &:hover {
+      cursor: pointer;
+      background: rgb(17, 24, 39);
+    }
+    margin: 10px;
+    font-size: 1.5em;
+    min-width: 50px;
+    min-height: 50px;
+    border-radius: 50%;
+    background-color: rgba(17, 24, 39, 0.6);
+    border: none;
+  }
+
 }
 

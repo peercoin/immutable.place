@@ -50,7 +50,6 @@ function canvasReducer(
   }
 
   return new CanvasData(bytes, canvas.error);
-
 }
 
 export default function useCanvas()

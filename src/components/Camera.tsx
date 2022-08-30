@@ -152,8 +152,12 @@ export default function Camera(
             </ShortClickable>
           </TransformComponent>
           <div className="zoom-buttons">
-            <button onClick={() => zoomIn(0.9, 200)}>+</button>
-            <button onClick={() => zoomOut(0.9, 200)}>−</button>
+            <button onClick={() => zoomIn(0.9, 200)}>
+              <img src="zoom-in.svg" />
+            </button>
+            <button onClick={() => zoomOut(0.9, 200)}>
+              <img src="zoom-out.svg" />
+            </button>
           </div>
         </Fragment>
       )}
