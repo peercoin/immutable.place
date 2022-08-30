@@ -46,14 +46,14 @@ export default function PixelColourPayment(
           isNewColour
             ? <Fragment>
               To change the colour to {colourName}, please pay a minimum
-              of {amtStr} PPC to the following address. You can scan the QR code
-              to make payment. The required payment amount may be different if
-              this pixel receives any other payments.
+              of {amtStr} PPC to the following burn address. You can scan the QR
+              code to make payment. The required payment amount may be different
+              if this pixel receives any other payments.
             </Fragment>
             : <Fragment>
               The colour {colourName} is currently active but you may make an
               additional payment to make it more costly to change the colour.
-              Please use the address and/or QR code below.
+              Please use the burn address and/or QR code below.
             </Fragment>
         }
       </p>
@@ -69,6 +69,7 @@ export default function PixelColourPayment(
         className="payment-qr"
         value={uri}
         bgColor="#0000"
+        fgColor="#fff"
       />
       {
         isNewColour
@@ -87,9 +88,9 @@ export default function PixelColourPayment(
       </p>
       {
         isNewColour
-          ? <div className="payment-buttons">
-            <button className="payment-cancel" onClick={onCancel}>Cancel</button>
-            <button className="payment-confirm" onClick={onConfirm}>I have made payment</button>
+          ? <div className="modal-button-container">
+            <button className="secondary" onClick={onCancel}>Cancel</button>
+            <button className="primary" onClick={onConfirm}>I have made payment</button>
           </div>
           : null
       }

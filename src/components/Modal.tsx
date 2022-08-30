@@ -29,7 +29,7 @@ export default function Modal(
         <div className="modal-header">
           {topLeftElement}
           {title}
-          <button className="closeBtn" onClick={onClose}>Close X</button>
+          <div className="closeBtn" onClick={onClose}>×</div>
         </div>
         <div className="modal-content">
           {children}
