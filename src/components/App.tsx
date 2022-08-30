@@ -9,17 +9,6 @@ import useCanvas from "../hooks/useCanvas";
 import TermsModal from "./TermsModal";
 import InfoModal from "./InfoModal";
 
-// This needs to be changed to not show hovered pixels. Instead the ImageData
-// should be used
-function saveCanvasAsImage() {
-  const [canvas] = document.getElementsByClassName("pixel-canvas");
-  const image = canvas ? (canvas as HTMLCanvasElement).toDataURL("image/png").replace("image/png", "image/octet-stream") : null;
-
-  if (image) {
-    window.location.href = image;
-  }
-}
-
 /* eslint-disable max-lines-per-function */
 export default function App() {
 
@@ -31,6 +20,8 @@ export default function App() {
   const [colourDrop, setColourDrop] = useState<Colour | null>(null);
   const [pixelCoord, setPixelCoord] = useState<PixelCoord | null>(null);
   const canvasRef = useRef<PixelCanvasRef>(null);
+
+  const { imgData, error } = canvasData;
 
   const handleCanvasClick = useCallback((e: MouseEvent) => {
 
@@ -59,7 +50,28 @@ export default function App() {
     dispatchCanvas(pixelColour);
   }, [handleModalClose, dispatchCanvas]);
 
-  const { imgData, error } = canvasData;
+  const saveCanvasAsImage = useCallback(() => {
+
+    if (imgData === null) return;
+
+    const tempCanvas = document.createElement("canvas") as HTMLCanvasElement;
+    tempCanvas.width = imgData.width;
+    tempCanvas.height = imgData.height;
+
+    const ctx = tempCanvas.getContext("2d", { alpha: false });
+    if (ctx === null) return;
+
+    ctx.putImageData(imgData, 0, 0);
+
+    const image = tempCanvas.toDataURL("image/png");
+
+    const link = document.createElement("a");
+    link.href = image;
+    link.download = "canvas.png";
+    link.click();
+
+  }, [imgData]);
+
   const errorReason = error === null || error === ""
     ? ""
     : `: ${error}`;
