@@ -1,7 +1,7 @@
 import "./PixelColourPayment.scss";
 import {PixelColourData, PixelCoord} from "coin-canvas-lib";
 import {satsToCoinString} from "../utils/coin";
-import {Fragment} from "react";
+import {Fragment, useCallback, useState} from "react";
 import {QRCodeSVG} from "qrcode.react";
 
 const MIN_AMOUNT = BigInt(10000);
@@ -19,6 +19,14 @@ export default function PixelColourPayment(
     onTerms: () => void
   }
 ) {
+
+  const [copiedAddr, setCopiedAddr] = useState<string | null>(null);
+
+  const copyAddr = useCallback(async () => {
+    await navigator.clipboard.writeText(colourData.address);
+    setCopiedAddr(colourData.address);
+    setTimeout(() => setCopiedAddr(null), 5000);
+  }, [colourData.address]);
 
   const isNewColour = activeColourData.colour.id !== colourData.colour.id;
 
@@ -58,20 +66,27 @@ export default function PixelColourPayment(
             </Fragment>
         }
       </p>
-      <p className="payment-details">
-        {
-          isNewColour
-            ? <Fragment><b>Required Amount</b>: {amtStr} PPC<br/></Fragment>
-            : null
-        }
-        <b>Address</b>: {colourData.address}
-      </p>
-      <QRCodeSVG
-        className="payment-qr"
-        value={uri}
-        bgColor="#0000"
-        fgColor="#fff"
-      />
+      <div className="payment-details">
+        <QRCodeSVG
+          className="payment-qr"
+          value={uri}
+          bgColor="#0000"
+          fgColor="#fff"
+        />
+        <p className="payment-text">
+          {
+            isNewColour
+              ? <Fragment><b>Required Amount</b>: {`${amtStr}\u00A0PPC`}<br/></Fragment>
+              : null
+          }
+          <b>Address</b>: <b
+            onClick={copyAddr} className="addr-copy"
+          >
+            { copiedAddr === colourData.address ? "Copied!" : "Copy ⧉" }
+          </b>
+          <div>{colourData.address}</div>
+        </p>
+      </div>
       {
         isNewColour
           ? <p>

@@ -1,8 +1,21 @@
+
 .payment-details {
-    overflow-wrap: break-word;
+    margin: 20px auto 10px auto;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.payment-text {
+    overflow-wrap: anywhere;
+    .addr-copy {
+        float: right;
+        cursor: pointer;
+    }
 }
 
 .payment-qr {
-    margin: 20px auto 10px auto;
     display: block;
+    min-width: 128px;
+    min-height: 128px;
 }
