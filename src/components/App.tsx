@@ -8,6 +8,7 @@ import Palette from "./Palette";
 import useCanvas from "../hooks/useCanvas";
 import TermsModal from "./TermsModal";
 import InfoModal from "./InfoModal";
+import {isIOS, isSafari} from "react-device-detect";
 
 /* eslint-disable max-lines-per-function */
 export default function App() {
@@ -91,12 +92,18 @@ export default function App() {
     return n.toString().padStart(3, "0");
   }
 
+  // Scale canvas on Safari desktop to avoid blurring, but do not do this on
+  // iOS as it breaks. Not needed on other browsers.
+  let canvasScale = 1;
+  if (isSafari && !isIOS)
+    canvasScale = 30;
+
   return (
     <Fragment>
       <Camera
         onClick={handleCanvasClick}
         onMoved={handleMove}
-        scaleAdjustment={1/30}
+        scaleAdjustment={1/canvasScale}
       >
         <PixelCanvas
           imgData={imgData}
@@ -104,7 +111,7 @@ export default function App() {
           hoverColour={colourDrop}
           onPixelHover={setPixelCoord}
           activePixel={modalPixel}
-          scale={30}
+          scale={canvasScale}
         />
       </Camera>
       {

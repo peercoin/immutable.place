@@ -132,6 +132,7 @@ function PixelCanvas(
 
       canvas.style.width = `${imgData.width*scale}px`;
       canvas.style.height = `${imgData.height*scale}px`;
+      canvas.style.boxShadow = `0px 0px ${15*scale}px ${5*scale}px rgb(0 0 0 / 47%)`;
 
     },
     [imgData.height, imgData.width, scale]
