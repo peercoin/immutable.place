@@ -52,7 +52,7 @@ module.exports = {
         ],
         "camelcase": "error",
         "class-methods-use-this": "error",
-        "comma-dangle": "error",
+        "comma-dangle": "off",
         "comma-spacing": [
             "error",
             {

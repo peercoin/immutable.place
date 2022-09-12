@@ -1,0 +1,31 @@
+.info-modal {
+  &-tos-link {
+    margin-right: 1rem;
+  }
+
+  &-qr {
+    &-box {
+        padding: 10px;
+    }
+
+    &-code {
+    min-width: 135px;
+    width: 135px;
+    min-height: 140px;
+    height: 140px;
+    }
+  }
+
+  &-scan-me-btn {
+    background: #ffffff;
+    border-radius: 10px;
+    min-width: 135px;
+    width: 135px;
+    min-height: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #111827;
+  }
+}

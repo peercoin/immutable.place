@@ -40,7 +40,18 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  padding-left: 10px;
   gap: 15px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+
+  a {
+    text-decoration: none;
+  }
 }
 
 .modal-content {
