@@ -1,0 +1,46 @@
+.info-modal {
+  &-tos-link {
+    margin-right: 1rem;
+  }
+
+  &-fndtn-box {
+    @media screen and (min-width: 412px) {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  &-qr {
+    &-box {
+      @media screen and (max-width: 411px) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    &-box {
+      padding: 10px;
+    }
+
+    &-code {
+      min-width: 135px;
+      width: 135px;
+      min-height: 140px;
+      height: 140px;
+    }
+  }
+
+  &-scan-me-btn {
+    background: #ffffff;
+    border-radius: 10px;
+    min-width: 135px;
+    width: 135px;
+    min-height: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #111827;
+  }
+}

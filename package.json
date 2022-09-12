@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "description": "React app for Immutable.Place",
-  "keywords": ["peercoin", "blockchain", "crypto"],
+  "keywords": [
+    "peercoin",
+    "blockchain",
+    "crypto"
+  ],
   "repository": "https://github.com/peercoin/coin-canvas-web",
   "dependencies": {
     "@types/node": "^18.0.4",

@@ -1,5 +1,4 @@
 .modal {
-
   position: absolute;
   width: 650px;
   max-height: calc(100% - 120px);
@@ -22,7 +21,6 @@
     right: 0;
     border-radius: 0;
   }
-
 }
 
 .modal-background {
@@ -40,7 +38,18 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  padding-left: 10px;
   gap: 15px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+
+  a {
+    text-decoration: none;
+  }
 }
 
 .modal-content {
@@ -94,6 +103,4 @@
       background: #1c2840;
     }
   }
-
 }
-
