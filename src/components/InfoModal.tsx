@@ -33,7 +33,7 @@ export default function InfoModal({
           blockchain.
         </small>
       </p>
-      <div>
+      <div className="info-modal-fndtn-box">
         <div>
           <h3>Peercoin Foundation</h3>
           <p>
@@ -46,7 +46,7 @@ export default function InfoModal({
           </p>
         </div>
         <div className="info-modal-qr-box">
-          <img className="info-modal-qr-code" src="qr.svg" alt="qr-code"/>
+          <img className="info-modal-qr-code" src="qr.svg" alt="qr-code" />
           <div className="info-modal-scan-me-btn"> SCAN ME </div>
         </div>
       </div>

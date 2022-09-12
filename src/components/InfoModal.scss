@@ -3,7 +3,22 @@
     margin-right: 1rem;
   }
 
+  &-fndtn-box {
+    @media screen and (min-width: 412px) {
+      display: flex;
+      align-items: center;
+    }
+  }
+
   &-qr {
+    &-box {
+      @media screen and (max-width: 411px) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
     &-box {
       padding: 10px;
     }
