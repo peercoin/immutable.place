@@ -14,6 +14,7 @@ export default function PixelColourPayment({
   onCancel,
   onConfirm,
   onTerms,
+  onBuy,
 }: {
   pixel: PixelCoord;
   colourData: PixelColourData;
@@ -21,6 +22,7 @@ export default function PixelColourPayment({
   onCancel: () => void;
   onConfirm: () => void;
   onTerms: () => void;
+  onBuy: () => void;
 }) {
   const [copiedAddr, setCopiedAddr] = useState<string | null>(null);
 
@@ -101,11 +103,18 @@ export default function PixelColourPayment({
           </small>
         </p>
       ) : null}
-      <p>
-        <small>
-          Payments are subject to the <a onClick={onTerms}>Terms of Use</a>.
-        </small>
-      </p>
+      <div className="payment-footer">
+        <p>
+          <small>
+            Payments are subject to the <a onClick={onTerms}>Terms of Use</a>.
+          </small>
+        </p>
+        <p>
+          <small>
+            <a onClick={onBuy}>How to buy Peercoin</a>
+          </small>
+        </p>
+      </div>
       {isNewColour ? (
         <div className="modal-button-container">
           <button className="secondary" onClick={onCancel}>

@@ -123,6 +123,7 @@ export default function PixelModal({
           onConfirm(new PixelColour(pixel, newColour.id));
         }}
         onTerms={onTerms}
+        onBuy={onBuy}
       />
     );
   }
