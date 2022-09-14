@@ -67,7 +67,7 @@ export default function PixelModal({
 
   function getPixelColourData(c: Colour | undefined) {
     if (c === undefined) return null;
-    const colourData = pixelData?.colours.find((pcd) => pcd.colour.id == c.id);
+    const colourData = pixelData?.colours.find(pcd => pcd.colour.id == c.id);
     if (colourData === undefined) return null;
     return colourData;
   }
