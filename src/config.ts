@@ -15,8 +15,6 @@ export default {
   reconnectMs: 5000,
   addrGen: new P2putPixelAddrGenerator(
     env.REACT_APP_CONF_NET_LETTER_CODE!, // Testnet
-    env.REACT_APP_CONF_NET_LETTER_CODE === "tpc"
-      ? [0xc7, 0x66, 0xce, 0xc1, 0xef]
-      : [0xc7, 0x66, 0xce, 0xc1, 0xef] // "canvas00" prefix
+    [0xc7, 0x66, 0xce, 0xc1, 0xef] // "canvas00" prefix
   ),
 };

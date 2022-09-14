@@ -19,3 +19,9 @@
     min-width: 128px;
     min-height: 128px;
 }
+
+.payment-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem;
+}
