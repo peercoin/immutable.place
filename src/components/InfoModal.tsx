@@ -47,7 +47,7 @@ export default function InfoModal({
         </div>
         <div className="info-modal-qr-box">
           <img className="info-modal-qr-code" src="qr.svg" alt="qr-code" />
-          <div className="info-modal-scan-me-btn"> SCAN ME </div>
+          <div className="info-modal-scan-me-btn"> DONATE </div>
         </div>
       </div>
       <div className="modal-footer">
