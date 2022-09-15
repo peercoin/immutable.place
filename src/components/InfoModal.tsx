@@ -51,7 +51,9 @@ export default function InfoModal({
         </div>
       </div>
       <div className="modal-footer">
-        <span>Version: {packageJson.version}</span>
+        <span>
+          <a href="https://github.com/peercoin/immutable.place">Version: {packageJson.version}</a>
+        </span>
         <span className="info-modal-tos-link">
           <a onClick={onTerms}>Terms of Use</a>
         </span>
