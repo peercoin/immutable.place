@@ -83,7 +83,7 @@ export default function BuyModal({
         <h3>DeFi</h3>
         <p>
           <small>
-            Wrapped Peercoin is avaliable on both Ethereum and Polygon networks.
+            Wrapped Peercoin is available on both Ethereum and Polygon networks.
             <br />
             <a
               href="https://info.quickswap.exchange/#/token/0x91e7e32c710661c44ae44d10aa86135d91c3ed65"
