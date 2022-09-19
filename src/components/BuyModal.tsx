@@ -1,5 +1,4 @@
 import Modal from "./Modal";
-import "./BuyModal.scss";
 
 /* eslint-disable max-lines-per-function */
 export default function BuyModal({
@@ -116,10 +115,10 @@ export default function BuyModal({
             </a>
           </small>
         </p>
-        <div className="buy-modal-go-back-wrapper">
-          <div className="buy-modal-go-back-button" onClick={onClose}>
+        <div className="modal-button-container">
+          <button className="secondary" onClick={onClose}>
             Go Back
-          </div>
+          </button>
         </div>
       </div>
     </Modal>
