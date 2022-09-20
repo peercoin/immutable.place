@@ -41,7 +41,14 @@ export default function InfoModal({
               This project has been sponsored by Stichting Peercoin Foundation.
               A non-profit organization established with a simple mission of
               promoting and supporting the continued education, development, and
-              overall progression of the Peercoin project.
+              overall progression of the Peercoin project.<br/>
+              <a
+                href="https://www.peercoin.net/foundation"
+                target="blank"
+                rel="noopener norefferer"
+              >
+                Stichting Peercoin Foundation
+              </a>
             </small>
           </p>
         </div>
