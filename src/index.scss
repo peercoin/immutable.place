@@ -1,8 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Heebo&display=swap');
+@import url("google-fonts-1663605985735.css");
 
 body {
   margin: 0;
-  font-family: 'Heebo', sans-serif;
+  font-family: "Heebo", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -21,6 +21,7 @@ button {
 
 a {
   cursor: pointer;
+  color: white;
   text-decoration: underline;
+  text-underline-offset: 4px;
 }
-

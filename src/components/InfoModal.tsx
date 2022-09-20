@@ -46,8 +46,16 @@ export default function InfoModal({
           </p>
         </div>
         <div className="info-modal-qr-box">
-          <img className="info-modal-qr-code" src="qr.svg" alt="qr-code" />
-          <div className="info-modal-scan-me-btn"> DONATE </div>
+          <img className="info-modal-qr-code" src="qr.png" alt="qr-code" />
+          <div className="info-modal-scan-me-btn">
+            <a
+              href="https://www.peercoin.net/foundation"
+              target="_blank"
+              rel="noopener norefferer"
+            >
+              Donate
+            </a>
+          </div>
         </div>
       </div>
       <div className="modal-footer">

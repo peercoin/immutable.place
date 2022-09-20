@@ -55,7 +55,7 @@ export default function PixelColourPayment({
 
   return (
     <Fragment>
-      <p>
+      <p className="payment-paragraph">
         {isNewColour ? (
           <Fragment>
             To change the colour to {colourName}, please pay a minimum of{" "}

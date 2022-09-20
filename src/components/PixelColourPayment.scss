@@ -1,27 +1,30 @@
-
 .payment-details {
-    margin: 20px auto 10px auto;
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
+  margin: 20px auto 10px auto;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
 }
 
 .payment-text {
-    overflow-wrap: anywhere;
-    .addr-copy {
-        float: right;
-        cursor: pointer;
-    }
+  overflow-wrap: anywhere;
+  .addr-copy {
+    float: right;
+    cursor: pointer;
+  }
 }
 
 .payment-qr {
-    display: block;
-    min-width: 128px;
-    min-height: 128px;
+  display: block;
+  min-width: 128px;
+  min-height: 128px;
 }
 
 .payment-footer {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1rem;
+}
+
+.payment-paragraph {
+  font-weight: 900;
 }

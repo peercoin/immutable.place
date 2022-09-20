@@ -1,5 +1,4 @@
 import Modal from "./Modal";
-import "./BuyModal.scss";
 
 /* eslint-disable max-lines-per-function */
 export default function BuyModal({
@@ -17,22 +16,26 @@ export default function BuyModal({
           <small>
             Peercoin can be purchased using a credit card by using one of the
             following services:
-            <br />
-            <a
-              href="https://anycoindirect.eu/en/buy-peercoin"
-              target="_blank"
-              rel="noopener norefferer"
-            >
-              - Anycoindirect
-            </a>
-            <br />
-            <a
-              href="https://buy.peercoin.net"
-              target="_blank"
-              rel="noopener norefferer"
-            >
-              - buy.peercoin.net
-            </a>
+            <ul>
+              <li>
+                <a
+                  href="https://anycoindirect.eu/en/buy-peercoin"
+                  target="_blank"
+                  rel="noopener norefferer"
+                >
+                  Anycoindirect
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://buy.peercoin.net"
+                  target="_blank"
+                  rel="noopener norefferer"
+                >
+                  buy.peercoin.net
+                </a>
+              </li>
+            </ul>
           </small>
         </p>
         <h3>Cryptocurrency Exchanges</h3>
@@ -41,67 +44,79 @@ export default function BuyModal({
             If you already own cryptocurrency, below is a list of exchanges
             which support Peercoin and where it can be traded actively. Send
             your coins there and you will be able to purchase Peercoin.
-            <br />
-            <a
-              href="https://www.therocktrading.com/en/offers/PPCBTC"
-              target="_blank"
-              rel="noopener norefferer"
-            >
-              - The Rock Trading
-            </a>
-            <br />
-            <a
-              href="https://global.bittrex.com/trade/ppc-btc"
-              target="_blank"
-              rel="noopener norefferer"
-            >
-              - Bittrex
-            </a>
-            <br />
-            <a
-              href="https://main.southxchange.com/Market/Book/PPC/BTC"
-              target="_blank"
-              rel="noopener norefferer"
-            >
-              - Southxchange
-            </a>
-            <br />
-            <a
-              href="https://changelly.com"
-              target="_blank"
-              rel="noopener norefferer"
-            >
-              - Changelly
-            </a>
-            <br />
-            <a href="https://flyp.me" target="_blank" rel="noopener norefferer">
-              - Flyp.me
-            </a>
-            <br />
+            <ul>
+              <li>
+                <a
+                  href="https://www.therocktrading.com/en/offers/PPCBTC"
+                  target="_blank"
+                  rel="noopener norefferer"
+                >
+                  The Rock Trading
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://global.bittrex.com/trade/ppc-btc"
+                  target="_blank"
+                  rel="noopener norefferer"
+                >
+                  Bittrex
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://main.southxchange.com/Market/Book/PPC/BTC"
+                  target="_blank"
+                  rel="noopener norefferer"
+                >
+                  Southxchange
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://changelly.com"
+                  target="_blank"
+                  rel="noopener norefferer"
+                >
+                  Changelly
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://flyp.me"
+                  target="_blank"
+                  rel="noopener norefferer"
+                >
+                  Flyp.me
+                </a>
+              </li>
+            </ul>
           </small>
         </p>
         <h3>DeFi</h3>
         <p>
           <small>
             Wrapped Peercoin is available on both Ethereum and Polygon networks.
-            <br />
-            <a
-              href="https://info.quickswap.exchange/#/token/0x91e7e32c710661c44ae44d10aa86135d91c3ed65"
-              target="_blank"
-              rel="noopener norefferer"
-            >
-              - Quickswap
-            </a>
-            <br />
-            <a
-              href="https://info.uniswap.org/#/tokens/0x044d078f1c86508e13328842cc75ac021b272958Please"
-              target="_blank"
-              rel="noopener norefferer"
-            >
-              - Uniswap
-            </a>
-            <br />
-            <br />
+            <ul>
+              <li>
+                <a
+                  href="https://info.quickswap.exchange/#/token/0x91e7e32c710661c44ae44d10aa86135d91c3ed65"
+                  target="_blank"
+                  rel="noopener norefferer"
+                >
+                  Quickswap
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://info.uniswap.org/#/tokens/0x044d078f1c86508e13328842cc75ac021b272958Please"
+                  target="_blank"
+                  rel="noopener norefferer"
+                >
+                  Uniswap
+                </a>
+              </li>
+            </ul>
             Mind, that after obtaining wrapped Peercoin, you must unwrap it to
             your Peercoin wallet.
             <br />
@@ -116,10 +131,10 @@ export default function BuyModal({
             </a>
           </small>
         </p>
-        <div className="buy-modal-go-back-wrapper">
-          <div className="buy-modal-go-back-button" onClick={onClose}>
+        <div className="modal-button-container">
+          <button className="secondary" onClick={onClose}>
             Go Back
-          </div>
+          </button>
         </div>
       </div>
     </Modal>
