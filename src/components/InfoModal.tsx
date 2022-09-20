@@ -28,9 +28,7 @@ export default function InfoModal({
       <h3>About Peercoin</h3>
       <p>
         <small>
-          Peercoin is one of the original, pioneering public blockchains.
-          Peercoin is primarily famous for being the first Proof-Of-Stake
-          blockchain.
+          Peercoin is the original Proof-of-Stake blockchain. It is fairly distributed, open-source and community driven. Peercoin is designed around concepts of both energy and economical sustainability, both made possible by innovation of the Proof-of-Stake consensus.
         </small>
       </p>
       <div className="info-modal-fndtn-box">
