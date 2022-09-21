@@ -96,7 +96,7 @@ export default function BuyModal({
         <h3>DeFi</h3>
         <p>
           <small>
-            Wrapped Peercoin is available on both Ethereum and Polygon networks.
+            Wrapped peercoin (wPPC) is available on both Ethereum and Polygon networks.
             <ul>
               <li>
                 <a
@@ -109,7 +109,7 @@ export default function BuyModal({
               </li>
               <li>
                 <a
-                  href="https://info.uniswap.org/#/tokens/0x044d078f1c86508e13328842cc75ac021b272958Please"
+                  href="https://info.uniswap.org/#/tokens/0x044d078f1c86508e13328842cc75ac021b272958"
                   target="_blank"
                   rel="noopener norefferer"
                 >
@@ -117,18 +117,41 @@ export default function BuyModal({
                 </a>
               </li>
             </ul>
-            Mind, that after obtaining wrapped Peercoin, you must unwrap it to
-            your Peercoin wallet.
-            <br />
-            For more information, see
-            <br />
-            <a
-              href="https://www.peercoin.net/resources#exchanges"
-              target="_blank"
-              rel="noopener norefferer"
-            >
-              peercoin.net/resources#exchanges
-            </a>
+          </small>
+        </p>
+        <h3>Peercoin Wallets</h3>
+        <p>
+          <small>
+            The following peercoin wallets can be used to receive your peercoin and make payments:
+            <ul>
+              <li>
+                <a
+                  href="https://play.google.com/store/apps/details?id=com.coinerella.peercoin"
+                  target="_blank"
+                  rel="noopener norefferer"
+                >
+                  Android
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://apps.apple.com/app/peercoin-wallet/id1571755170"
+                  target="_blank"
+                  rel="noopener norefferer"
+                >
+                  iOS
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://wallet.peercoin.net/"
+                  target="_blank"
+                  rel="noopener norefferer"
+                >
+                  Web
+                </a>
+              </li>
+            </ul>
           </small>
         </p>
         <div className="modal-button-container">
