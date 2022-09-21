@@ -96,7 +96,7 @@ export default function BuyModal({
         <h3>DeFi</h3>
         <p>
           <small>
-            Wrapped Peercoin is available on both Ethereum and Polygon networks.
+            Wrapped peercoin (wPPC) is available on both Ethereum and Polygon networks.
             <ul>
               <li>
                 <a
@@ -109,7 +109,7 @@ export default function BuyModal({
               </li>
               <li>
                 <a
-                  href="https://info.uniswap.org/#/tokens/0x044d078f1c86508e13328842cc75ac021b272958Please"
+                  href="https://info.uniswap.org/#/tokens/0x044d078f1c86508e13328842cc75ac021b272958"
                   target="_blank"
                   rel="noopener norefferer"
                 >
@@ -117,8 +117,7 @@ export default function BuyModal({
                 </a>
               </li>
             </ul>
-            Mind, that after obtaining wrapped Peercoin, you must unwrap it to
-            your Peercoin wallet.
+              After obtaining wrapped peercoin, you must unwrap it to your peercoin wallet using the bridge.peercoin.net website.
             <br />
             For more information, see
             <br />
