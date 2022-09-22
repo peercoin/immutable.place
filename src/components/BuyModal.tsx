@@ -96,7 +96,18 @@ export default function BuyModal({
         <h3>DeFi</h3>
         <p>
           <small>
-            Wrapped peercoin (wPPC) is available on both Ethereum and Polygon networks. Conversion to PPC can be done at bridge.peercoin.net.
+            Wrapped peercoin (wPPC) is available on both Ethereum and Polygon
+            networks.
+            <br />
+            Conversion to PPC can be done at
+            <a
+              href="https://bridge.peercoin.net"
+              target="_blank"
+              rel="noopener norefferer"
+            >
+              {" "}
+              bridge.peercoin.net
+            </a>
             <ul>
               <li>
                 <a
@@ -122,7 +133,8 @@ export default function BuyModal({
         <h3>Peercoin Wallets</h3>
         <p>
           <small>
-            The following peercoin wallets can be used to receive your peercoin and make payments:
+            The following peercoin wallets can be used to receive your peercoin
+            and make payments:
             <ul>
               <li>
                 <a
