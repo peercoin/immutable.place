@@ -115,7 +115,6 @@ export default function BuyModal({
                 >
                   Uniswap
                 </a>
-                
               </li>
             </ul>
           </small>
