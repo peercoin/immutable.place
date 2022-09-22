@@ -96,7 +96,7 @@ export default function BuyModal({
         <h3>DeFi</h3>
         <p>
           <small>
-            Wrapped peercoin (wPPC) is available on both Ethereum and Polygon networks.
+            Wrapped peercoin (wPPC) is available on both Ethereum and Polygon networks. Conversion to PPC can be done at bridge.peercoin.net.
             <ul>
               <li>
                 <a
@@ -115,6 +115,7 @@ export default function BuyModal({
                 >
                   Uniswap
                 </a>
+                
               </li>
             </ul>
           </small>
