@@ -25,11 +25,31 @@ export default function InfoModal({
           of addresses.
         </small>
       </p>
+      <p>
+        <small>
+          <a
+            href="https://www.peercoin.net/blog/immutableplacetutorial"
+            target="blank"
+            rel="noopener norefferer"
+          >
+            Full tutorial here
+          </a>
+        </small>
+      </p>
       <h3>About Peercoin</h3>
       <p>
         <small>
-          Peercoin is the original Proof-of-Stake blockchain. It is fairly distributed, open-source and community driven.
-          Peercoin is designed around concepts of both energy and economical sustainability, both made possible by the innovation of Proof-of-Stake consensus.
+          <a
+            href="https://www.peercoin.net/"
+            target="blank"
+            rel="noopener norefferer"
+          >
+            Peercoin
+          </a>{" "}
+          is the original Proof-of-Stake blockchain. It is fairly distributed,
+          open-source and community driven. Peercoin is designed around concepts
+          of both energy and economical sustainability, both made possible by
+          the innovation of Proof-of-Stake consensus.
         </small>
       </p>
       <div className="info-modal-fndtn-box">
@@ -37,14 +57,18 @@ export default function InfoModal({
           <h3>Peercoin Foundation</h3>
           <p>
             <small>
-              This project was sponsored by the Peercoin Foundation, a non-profit organization established with the mission of promoting and supporting the continued development and overall progression of the Peercoin project.<br/>
+              This project was sponsored by the{" "}
               <a
                 href="https://www.peercoin.net/foundation"
                 target="blank"
                 rel="noopener norefferer"
               >
-                Stichting Peercoin Foundation
+                Peercoin Foundation
               </a>
+              , a non-profit organization established with the mission of
+              promoting and supporting the continued development and overall
+              progression of the Peercoin project.
+              <br />
             </small>
           </p>
         </div>
