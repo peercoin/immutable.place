@@ -28,7 +28,7 @@ export default function InfoModal({
       <p>
         <small>
           <a
-            href="https://www.peercoin.net/blog/immutableplacetutorial"
+            href="https://coinmarketcap.com/community/articles/41602"
             target="blank"
             rel="noopener norefferer"
           >
