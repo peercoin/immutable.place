@@ -51,8 +51,7 @@ export default function PixelColourPayment({
   const label = `Pixel%20(${pixel.x},%20${pixel.y})%20${capitalColour}`;
 
   const amtSegment = isNewColour ? `amount=${amtStr}&` : "";
-  // const uri = `peercoin:${colourData.address}?${amtSegment}label=${label}`; TODO renable when fixed iOS is available
-  const uri = `peercoin:${colourData.address}?label=${label}`;
+  const uri = `peercoin:${colourData.address}?${amtSegment}label=${label}`;
 
   return (
     <Fragment>
