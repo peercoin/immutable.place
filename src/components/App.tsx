@@ -13,9 +13,11 @@ import BuyModal from "./BuyModal";
 
 /* eslint-disable max-lines-per-function */
 export default function App() {
+
   const [termsOpen, setTermsOpen] = useState<boolean>(false);
   const [infoOpen, setInfoOpen] = useState<boolean>(false);
   const [buyOpen, setBuyOpen] = useState<boolean>(false);
+  const [gridMode, setGridMode] = useState<boolean>(false);
 
   const [canvasData, dispatchCanvas, client] = useCanvas();
   const [modalPixel, setModalPixel] = useState<PixelCoord | null>(null);
@@ -128,6 +130,10 @@ export default function App() {
           <img src="save.svg" />
         </button>
         <button onClick={() => setInfoOpen(true)}>?</button>
+        <button
+          onClick={() => setGridMode(!gridMode)}
+          className={ gridMode ? "active" : ""}
+        >𐄹</button>
       </div>
       <PixelModal
         pixel={modalPixel}

@@ -1,5 +1,7 @@
 @use "./mixins.scss";
 
+$button-color: rgba(17, 24, 39, 0.6);
+
 .load-screen {
   position: absolute;
   display: flex;
@@ -68,16 +70,23 @@
   margin: 15px;
 
   button {
-    &:hover {
-      cursor: pointer;
-      background: rgb(17, 24, 39);
-    }
+
     margin: 10px;
     font-size: 1.5em;
     min-width: 50px;
     min-height: 50px;
     border-radius: 50%;
-    background-color: rgba(17, 24, 39, 0.6);
+    background-color: $button-color;
     border: none;
+
+    &.active {
+      background: radial-gradient(rgba(0, 140, 200, 0.6) 0%, $button-color);
+    }
+
+    &:hover {
+      cursor: pointer;
+      background: rgb(17, 24, 39);
+    }
+
   }
 }
