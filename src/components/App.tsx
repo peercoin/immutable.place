@@ -18,6 +18,7 @@ export default function App() {
   const [infoOpen, setInfoOpen] = useState<boolean>(false);
   const [buyOpen, setBuyOpen] = useState<boolean>(false);
   const [gridMode, setGridMode] = useState<boolean>(false);
+  const [clickable, setClickable] = useState<boolean>(false);
 
   const [canvasData, dispatchCanvas, client] = useCanvas();
   const [modalPixel, setModalPixel] = useState<PixelCoord | null>(null);
@@ -39,8 +40,9 @@ export default function App() {
     });
   }, []);
 
-  const handleMove = useCallback(() => {
+  const handleMove = useCallback((nowClickable: boolean) => {
     canvasRef.current?.notifyMove();
+    setClickable(nowClickable);
   }, []);
 
   const handleModalClose = useCallback(() => {
@@ -107,6 +109,7 @@ export default function App() {
           onPixelHover={setPixelCoord}
           activePixel={modalPixel}
           scale={canvasScale}
+          showGrid={gridMode && clickable}
         />
       </Camera>
       {error === null ? null : (

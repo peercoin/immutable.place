@@ -48,7 +48,7 @@ $button-color: rgba(17, 24, 39, 0.6);
   margin: 25px;
   padding: 15px 16px;
   border-radius: 200px;
-  background: rgba(17, 24, 39, 0.6);
+  background: $button-color;
   color: white;
   pointer-events: none;
   font-family: monospace;
@@ -80,7 +80,8 @@ $button-color: rgba(17, 24, 39, 0.6);
     border: none;
 
     &.active {
-      background: radial-gradient(rgba(0, 140, 200, 0.6) 0%, $button-color);
+      background: radial-gradient(rgba(0, 140, 200, 0.9) 0%, $button-color);
+      border: solid 2px rgb(0, 180, 255);
     }
 
     &:hover {
