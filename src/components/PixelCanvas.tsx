@@ -177,8 +177,10 @@ function PixelCanvas(
           <div
             className="grid-overlay"
             style={{
-              width: imgData.width,
-              height: imgData.height
+              // Multiply by 10 due to scale adjustment
+              // +1 to include border on right and bottom
+              width: imgData.width*10 + 1,
+              height: imgData.height*10 + 1
             }}
           /> : null
       }

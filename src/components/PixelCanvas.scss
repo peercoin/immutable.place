@@ -11,9 +11,11 @@ $grid-color: #347;
 .grid-overlay {
     position: absolute;
     background-image:
-        linear-gradient(to right, $grid-color 0.1px, transparent 0.1px),
-        linear-gradient(to bottom, $grid-color 0.1px, transparent 0.1px);
-    background-size: 1px 1px;
+        linear-gradient(to right, $grid-color 1px, transparent 1px),
+        linear-gradient(to bottom, $grid-color 1px, transparent 1px);
+    background-size: 10px 10px;
+    transform: scale(0.1);
+    transform-origin: 0 0;
     top: 0;
 }
 
