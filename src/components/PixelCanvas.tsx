@@ -180,12 +180,13 @@ function PixelCanvas(
               // Multiply by 10 due to scale adjustment
               // +1 to include border on right and bottom
               width: imgData.width*10 + 1,
-              height: imgData.height*10 + 1
+              height: imgData.height*10 + 1,
+              transform: `scale(${scale*0.1})`
             }}
           /> : null
       }
     </div>
-  ), [imgData.height, imgData.width, showGrid]);
+  ), [imgData.height, imgData.width, showGrid, scale]);
 
 }
 /* eslint-enable */
