@@ -136,7 +136,9 @@ export default function App() {
         <button
           onClick={() => setGridMode(!gridMode)}
           className={ gridMode ? "active" : ""}
-        >𐄹</button>
+        >
+          <img src="gridmode.svg" />
+        </button>
       </div>
       <PixelModal
         pixel={modalPixel}
