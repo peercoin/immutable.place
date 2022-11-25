@@ -1,7 +1,20 @@
 @use "./mixins.scss";
 
+$grid-color: #347;
+
 .pixel-canvas {
     @include mixins.pixelated-canvas;
     // May be adjusted in JS to match scale
     box-shadow: 0px 0px 15px 5px rgb(0 0 0 / 47%);
 }
+
+.grid-overlay {
+    position: absolute;
+    background-image:
+        linear-gradient(to right, $grid-color 1px, transparent 1px),
+        linear-gradient(to bottom, $grid-color 1px, transparent 1px);
+    background-size: 10px 10px;
+    transform-origin: 0 0;
+    top: 0;
+}
+
