@@ -8,7 +8,7 @@ import Palette from "./Palette";
 import useCanvas from "../hooks/useCanvas";
 import TermsModal from "./TermsModal";
 import InfoModal from "./InfoModal";
-import { isIOS, isSafari } from "react-device-detect";
+import { isIOS, isSafari, isDesktop } from "react-device-detect";
 import BuyModal from "./BuyModal";
 
 /* eslint-disable max-lines-per-function */
@@ -105,7 +105,8 @@ export default function App() {
         <PixelCanvas
           imgData={imgData}
           ref={canvasRef}
-          hoverColour={colourDrop}
+          // Only show hover colour when on desktop using a cursor
+          hoverColour={isDesktop ? colourDrop : null}
           onPixelHover={setPixelCoord}
           activePixel={modalPixel}
           scale={canvasScale}
@@ -120,7 +121,7 @@ export default function App() {
           </div>
         </div>
       )}
-      {pixelCoord === null ? null : (
+      {pixelCoord === null || !isDesktop ? null : (
         <div className="coordinates-container">
           <div className="coordinates">
             ({padCoord(pixelCoord.x)}, {padCoord(pixelCoord.y)})
