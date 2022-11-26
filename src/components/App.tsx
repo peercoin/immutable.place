@@ -8,7 +8,7 @@ import Palette from "./Palette";
 import useCanvas from "../hooks/useCanvas";
 import TermsModal from "./TermsModal";
 import InfoModal from "./InfoModal";
-import { isIOS, isSafari, isDesktop } from "react-device-detect";
+import { isIOS, isSafari, isDesktop, browserVersion } from "react-device-detect";
 import BuyModal from "./BuyModal";
 
 /* eslint-disable max-lines-per-function */
@@ -90,10 +90,16 @@ export default function App() {
     return n.toString().padStart(3, "0");
   }
 
-  // Scale canvas on Safari desktop to avoid blurring, but do not do this on
-  // iOS as it breaks. Not needed on other browsers.
+  // Scale canvas on Safari to avoid blurring.
   let canvasScale = 1;
-  if (isSafari && !isIOS) canvasScale = 30;
+  if (isSafari) {
+    if (!isIOS)
+      canvasScale = 30;
+    else if (Number.parseInt(browserVersion, 10) >= 16)
+      // 10x scale adjustment looks crisp on iPhone and works without crashing
+      // on Safari 16 or higher
+      canvasScale = 10;
+  }
 
   return (
     <Fragment>
