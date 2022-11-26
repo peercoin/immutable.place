@@ -94,7 +94,7 @@ export default function App() {
   let canvasScale = 1;
   if (isSafari) {
     if (!isIOS)
-      canvasScale = 30;
+      canvasScale = 20;
     else if (Number.parseInt(browserVersion, 10) >= 16)
       // 10x scale adjustment looks crisp on iPhone and works without crashing
       // on Safari 16 or higher
