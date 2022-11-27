@@ -9,6 +9,7 @@ $grid-color: #347;
 }
 
 .grid-overlay {
+
     position: absolute;
     background-image:
         linear-gradient(to right, $grid-color 1px, transparent 1px),
@@ -16,5 +17,11 @@ $grid-color: #347;
     background-size: 10px 10px;
     transform-origin: 0 0;
     top: 0;
+
+    @supports (-moz-appearance:none) {
+        background-image: url("gridbackground.png");
+        image-rendering: smooth;
+    }
+
 }
 
