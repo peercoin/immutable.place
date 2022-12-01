@@ -24,7 +24,7 @@ export default function Camera(
   }: {
     children: ReactNode,
     onClick: (event: MouseEvent) => void,
-    onMoved: () => void,
+    onMoved: (clickable: boolean) => void,
     scaleAdjustment: number
   }
 ) {
@@ -55,8 +55,9 @@ export default function Camera(
   const handleChange = useCallback((transformer: ReactZoomPanPinchRef) => {
     // When the transformer changes, update if the canvas is clickable and
     // notify parent of potential movement
-    setClickable(transformer.state.scale >= CLICK_SCALE_THRESHOLD*scaleAdjustment);
-    onMoved();
+    const nowClickable = transformer.state.scale >= CLICK_SCALE_THRESHOLD*scaleAdjustment;
+    setClickable(nowClickable);
+    onMoved(nowClickable);
   }, [onMoved, scaleAdjustment]);
 
   // Handle setting an initial position and clickable state when the underlying

@@ -8,14 +8,17 @@ import Palette from "./Palette";
 import useCanvas from "../hooks/useCanvas";
 import TermsModal from "./TermsModal";
 import InfoModal from "./InfoModal";
-import { isIOS, isSafari } from "react-device-detect";
+import { isIOS, isSafari, isDesktop, browserVersion } from "react-device-detect";
 import BuyModal from "./BuyModal";
 
 /* eslint-disable max-lines-per-function */
 export default function App() {
+
   const [termsOpen, setTermsOpen] = useState<boolean>(false);
   const [infoOpen, setInfoOpen] = useState<boolean>(false);
   const [buyOpen, setBuyOpen] = useState<boolean>(false);
+  const [gridMode, setGridMode] = useState<boolean>(false);
+  const [clickable, setClickable] = useState<boolean>(false);
 
   const [canvasData, dispatchCanvas, client] = useCanvas();
   const [modalPixel, setModalPixel] = useState<PixelCoord | null>(null);
@@ -37,8 +40,9 @@ export default function App() {
     });
   }, []);
 
-  const handleMove = useCallback(() => {
+  const handleMove = useCallback((nowClickable: boolean) => {
     canvasRef.current?.notifyMove();
+    setClickable(nowClickable);
   }, []);
 
   const handleModalClose = useCallback(() => {
@@ -86,10 +90,16 @@ export default function App() {
     return n.toString().padStart(3, "0");
   }
 
-  // Scale canvas on Safari desktop to avoid blurring, but do not do this on
-  // iOS as it breaks. Not needed on other browsers.
+  // Scale canvas on Safari to avoid blurring.
   let canvasScale = 1;
-  if (isSafari && !isIOS) canvasScale = 30;
+  if (isSafari) {
+    if (!isIOS)
+      canvasScale = 20;
+    else if (Number.parseInt(browserVersion, 10) >= 16)
+      // 10x scale adjustment looks crisp on iPhone and works without crashing
+      // on Safari 16 or higher
+      canvasScale = 10;
+  }
 
   return (
     <Fragment>
@@ -101,10 +111,12 @@ export default function App() {
         <PixelCanvas
           imgData={imgData}
           ref={canvasRef}
-          hoverColour={colourDrop}
+          // Only show hover colour when on desktop using a cursor
+          hoverColour={isDesktop ? colourDrop : null}
           onPixelHover={setPixelCoord}
           activePixel={modalPixel}
           scale={canvasScale}
+          showGrid={gridMode && clickable}
         />
       </Camera>
       {error === null ? null : (
@@ -115,7 +127,7 @@ export default function App() {
           </div>
         </div>
       )}
-      {pixelCoord === null ? null : (
+      {pixelCoord === null || !isDesktop ? null : (
         <div className="coordinates-container">
           <div className="coordinates">
             ({padCoord(pixelCoord.x)}, {padCoord(pixelCoord.y)})
@@ -128,6 +140,12 @@ export default function App() {
           <img src="save.svg" />
         </button>
         <button onClick={() => setInfoOpen(true)}>?</button>
+        <button
+          onClick={() => setGridMode(!gridMode)}
+          className={ gridMode ? "active" : ""}
+        >
+          <img src="gridmode.svg" />
+        </button>
       </div>
       <PixelModal
         pixel={modalPixel}

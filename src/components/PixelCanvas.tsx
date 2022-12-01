@@ -18,13 +18,15 @@ function PixelCanvas(
     hoverColour,
     onPixelHover,
     activePixel,
-    scale
+    scale,
+    showGrid
   }: {
     imgData: ImageData
     hoverColour: Colour | null
     onPixelHover: (pixel: PixelCoord | null) => void,
     activePixel: PixelCoord | null,
-    scale: number
+    scale: number,
+    showGrid: boolean
   },
   ref: ForwardedRef<PixelCanvasRef>
 ) {
@@ -162,12 +164,29 @@ function PixelCanvas(
 
   }, [getCanvasCtx, activePixel, hoveredPixel, hoverColour, imgData]);
 
-  return useMemo(() => <canvas
-    className="pixel-canvas"
-    ref={canvasRef}
-    width={imgData.width}
-    height={imgData.height}
-  />, [imgData.height, imgData.width]);
+  return useMemo(() => (
+    <div className="canvas-container">
+      <canvas
+        className="pixel-canvas"
+        ref={canvasRef}
+        width={imgData.width}
+        height={imgData.height}
+      />
+      {
+        showGrid ?
+          <div
+            className="grid-overlay"
+            style={{
+              // Multiply by 10 due to scale adjustment
+              // +1 to include border on right and bottom
+              width: imgData.width*10 + 1,
+              height: imgData.height*10 + 1,
+              transform: `scale(${scale*0.1})`
+            }}
+          /> : null
+      }
+    </div>
+  ), [imgData.height, imgData.width, showGrid, scale]);
 
 }
 /* eslint-enable */
